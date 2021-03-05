@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="1f1c6500-ca07-448a-b956-12f8ef830eeb" solutionId="1f1c6500-ca07-448a-b956-12f8ef830eeb" resetWebServer="false" sharePointProductVersion="15.0" name="ListsUpdateUserFieldsTimerJob" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="ef0fd72e-54ce-4f31-91dc-6efc8c6aea47" />
+  </features>
+</package>
