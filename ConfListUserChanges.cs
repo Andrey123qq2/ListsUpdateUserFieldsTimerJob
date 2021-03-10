@@ -9,6 +9,6 @@ namespace ListsUpdateUserFieldsTimerJob
     class ConfListUserChanges
     {
         public string UserField;
-        public List<string> ProfileFields;
+        public Dictionary<string, string> AttributesFieldsMap;
     }
 }
