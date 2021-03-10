@@ -39,5 +39,23 @@ namespace ListsUpdateUserFieldsTimerJob
                     .ToList();
             return groupedByUserChanges;
         }
+//        AccountName = "string" in parent object
+
+//ChangeType = [Modify, Add] - Microsoft.Office.Server.UserProfiles.ChangeTypes
+
+//NewValue = object - string or DateTime, etc
+
+//ObjectType = SingleValueProperty - Microsoft.Office.Server.UserProfiles.ObjectTypes
+
+//ProfileProperty.Name = "string"
+
+
+//((UserProfileSingleValueChange) allChanges[0]).NewValue
+
+// var allChangesGrouped = profileManager.GetChanges().Cast<UserProfileChange>()
+//                    .Where(c => c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify)
+//                    .ToList().OrderBy(c=>c.AccountName).GroupBy(p=>p.AccountName);
+
+//        allChangesGrouped.ToList()[198].ToList()[0]
     }
 }
