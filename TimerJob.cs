@@ -1,4 +1,5 @@
-﻿using Microsoft.SharePoint.Administration;
+﻿using Microsoft.SharePoint;
+using Microsoft.SharePoint.Administration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,18 @@ namespace ListsUpdateUserFieldsTimerJob
         }
         public override void Execute(Guid contentDbId)
         {
-            try { } catch (Exception ex) { }
+            try {
+                List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory();
+                listsToModifyContextes.ForEach(l => UpdateList(l));
+
+            } catch (Exception ex) { }
         }
+
+        private void UpdateList(SPListToModifyContext listContext)
+        {
+            listContext.SetStrategy(new SPListUserAttributesStrategy());
+            listContext.UpdateListItems();
+        }
+
     }
 }

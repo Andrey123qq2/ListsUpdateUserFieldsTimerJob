@@ -13,6 +13,9 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SandboxedSolution>False</SandboxedSolution>
+	<LangVersion>latest</LangVersion>
+	<Nullable>enable</Nullable>
+    <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,28 +43,52 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LibCustom.SPS.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9cfd3b5973e55a7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPCommonLib\bin\Debug\LibCustom.SPS.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Server, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Server.UserProfiles, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfListUserChanges.cs" />
     <Compile Include="Features\Feature1\Feature1.EventReceiver.cs">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Compile>
+    <Compile Include="ISPListModifierStrategy.cs" />
+    <Compile Include="IProfileChanges.cs" />
+    <Compile Include="ISPListContext.cs" />
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.cs">
+      <DependentUpon>ListConfiguration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.designer.cs">
+      <DependentUpon>ListConfiguration.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SPListToModifyContext.cs" />
+    <Compile Include="SPListUserAttributesStrategy.cs" />
     <Compile Include="ProfilesChangesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerJob.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{ef0fd72e-54ce-4f31-91dc-6efc8c6aea47}</FeatureId>
     </None>
     <None Include="key.snk" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{70e577df-9b9c-49a4-99a8-b9621471f754}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{1f1c6500-ca07-448a-b956-12f8ef830eeb}</PackageId>
     </None>
@@ -74,6 +101,7 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
+    <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
