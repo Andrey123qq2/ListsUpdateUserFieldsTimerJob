@@ -15,58 +15,53 @@ namespace ListsUpdateUserFieldsTimerJob
         public void UpdateItems(SPListToModifyContext context)
         {
             _listContext = context;
-            var allChangesGrouped = GetChangesGroupedByUser();
-            allChangesGrouped.ForEach(g =>
-            {
-                string userLogin = g.Key;
-                string fieldName = _listContext.ERConf.UserField;
-                string fieldInternalName = _listContext.CurrentList.Fields.GetField(fieldName).InternalName;
-                SPUser spUser = _listContext.CurrentList.ParentWeb.EnsureUser(userLogin);
-                var userItems = GetItemsByUserField(spUser.ID, fieldInternalName);
-                var changesForUser = GetActualChangedPropertiesValuesForUser(g);
-                userItems.Cast<SPListItem>().ToList().ForEach(i =>
-                {
-                    UpdateItems(i, changesForUser);
-                });
-            });
+            var changesGroupedByUsers = GetChangesGroupedByUser();
+            changesGroupedByUsers.ForEach(g => UpdateUserItemsByChanges(g));
         }
 
-        private Dictionary<string, object> GetActualChangedPropertiesValuesForUser(IGrouping<string, UserProfileChange>)
+        private void UpdateUserItemsByChanges(IGrouping<string, UserProfileChange> changedProperties)
         {
-            Dictionary<string, object> changes = new Dictionary<string, object>();
-            g.ToList().ForEach(c =>
+            string userLogin = changedProperties.Key;
+            SPListItemCollection userItems = GetUserItems(userLogin);
+            Dictionary<string, object> changedAttributes = GetUserChangesByListFields(changedProperties);
+            UpdateUserItems(userItems, changedAttributes);
+        }
+
+        private Dictionary<string, object> GetUserChangesByListFields(IGrouping<string, UserProfileChange> changedProperties)
+        {
+            Dictionary<string, object> actualChanges = new Dictionary<string, object>();
+            changedProperties.ToList().ForEach(c =>
             {
                 var changedProperty = ((UserProfileSingleValueChange)c).ProfileProperty.Name;
                 if (_listContext.ERConf.AttributesFieldsMap.ContainsKey(changedProperty))
-                {
-                    actualChangedPropertiesValues.Add(changedProperty, ((UserProfileSingleValueChange)c).NewValue);
-                }
+                    actualChanges.Add(changedProperty, ((UserProfileSingleValueChange)c).NewValue);
             });
-            return changes;
-        }
-        public void UpdateUserFieldsInItems(string user, Dictionary<string, string> fieldsAndValues)
-        {
-            List<SPListItem> userItems = GetUserItems(user, _listContext.ERConf.UserField);
-            foreach (var item in userItems)
-                UpdateItem(item, fieldsAndValues);
+            return actualChanges;
         }
 
-        private void UpdateUserItems(SPListItemCollection items, UserProfileChange profileChanges)
+        private void UpdateUserItems(SPListItemCollection items, Dictionary<string, object> changedAttributes)
         {
             items.Cast<SPListItem>().ToList().ForEach(i =>
             {
-
+                changedAttributes.ToList().ForEach(p =>
+                {
+                    i[p.Key] = p.Value;
+                });
+                i.SystemUpdate();
             });
         }
 
-        private UserProfileChangeCollection GetChangesForListFields(UserProfileChange profileChanges)
+        private SPListItemCollection GetUserItems(string userLogin)
         {
-            profileChanges.
+            string fieldName = _listContext.ERConf.UserField;
+            string fieldInternalName = _listContext.CurrentList.Fields.GetField(fieldName).InternalName;
+            SPUser spUser = _listContext.CurrentList.ParentWeb.EnsureUser(userLogin);
+            SPListItemCollection items = QueryUserItems(spUser.ID, fieldInternalName);
+            return items;
         }
 
-        private SPListItemCollection GetItemsByUserField(int userID, string fieldInternalName)
+        private SPListItemCollection QueryUserItems(int userID, string fieldInternalName)
         {
-            
             string camlQueryTemplate = @"<Where><Eq><FieldRef Name='{0}' LookupId='True' /><Value Type = 'User'>{1}</Value></Eq></Where>";
             string camlQueryText = String.Format(camlQueryTemplate, fieldInternalName, userID);
             SPQuery spQuery = new SPQuery
@@ -80,29 +75,11 @@ namespace ListsUpdateUserFieldsTimerJob
         private List<IGrouping<string, UserProfileChange>> GetChangesGroupedByUser()
         {
             var groupedByUserChanges = _profilesChanges.Cast<UserProfileChange>()
-                    .Where(c => c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify)
-                    .OrderBy(c => c.AccountName)
-                    .GroupBy(p => p.AccountName)
-                    .ToList();
+                .Where(c => c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify)
+                .OrderBy(c => c.AccountName)
+                .GroupBy(p => p.AccountName)
+                .ToList();
             return groupedByUserChanges;
         }
-//        AccountName = "string" in parent object
-
-//ChangeType = [Modify, Add] - Microsoft.Office.Server.UserProfiles.ChangeTypes
-
-//NewValue = object - string or DateTime, etc
-
-//ObjectType = SingleValueProperty - Microsoft.Office.Server.UserProfiles.ObjectTypes
-
-//ProfileProperty.Name = "string"
-
-
-//((UserProfileSingleValueChange) allChanges[0]).NewValue
-
-// var allChangesGrouped = profileManager.GetChanges().Cast<UserProfileChange>()
-//                    .Where(c => c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify)
-//                    .ToList().OrderBy(c=>c.AccountName).GroupBy(p=>p.AccountName);
-
-//        allChangesGrouped.ToList()[198].ToList()[0]
     }
 }

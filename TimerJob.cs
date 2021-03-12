@@ -20,6 +20,7 @@ namespace ListsUpdateUserFieldsTimerJob
         {
             try {
                 List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory();
+                //TODO: AsParallel().ForAll
                 listsToModifyContextes.ForEach(l => UpdateList(l));
 
             } catch (Exception ex) { }
