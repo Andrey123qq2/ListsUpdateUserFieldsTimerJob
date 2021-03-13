@@ -13,7 +13,7 @@ namespace ListsUpdateUserFieldsTimerJob
     class ProfilesChangesManager : IDisposable
     {
         public static int DaysToCheck = 3;
-        public UserProfileChangeCollection RecentChanges { get; private set; }
+        //public UserProfileChangeCollection RecentChanges { get; private set; }
         private UserProfileManager _profileManager;
         private SPSite _site;
         //private static readonly ProfilesChangesManager _instance = new ProfilesChangesManager();
@@ -40,5 +40,18 @@ namespace ListsUpdateUserFieldsTimerJob
             UserProfileChangeCollection changes = _profileManager.GetChanges(changeQuery);
             return changes;
         }
+
+        //public List<string> GetProfilesAttributes()
+        //{
+        //    SPServiceContext serviceContext = SPServiceContext.GetContext(_site);
+        //    ProfileSubtypeManager profileSubtypeMgr = ProfileSubtypeManager.Get(serviceContext);
+        //    ProfileSubtype profileSubtype = profileSubtypeMgr.GetProfileSubtype(ProfileSubtypeManager.GetDefaultProfileName(ProfileType.User));
+        //    ProfileSubtypePropertyManager profileSubtypePropertyMgr = profileSubtype.Properties;
+        //    List<string> profileProperties = profileSubtypePropertyMgr.PropertiesWithSection
+        //        .ToArray().ToList()
+        //        .Select(p => ((ProfileSubtypeProperty)p).Name)
+        //        .ToList();
+        //    return profileProperties;
+        //}
     }
 }

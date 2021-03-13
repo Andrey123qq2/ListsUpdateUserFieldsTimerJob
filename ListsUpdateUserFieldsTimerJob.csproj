@@ -13,8 +13,8 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{C1CDDADD-2546-481F-9697-4EA41081F2FC};{14822709-B5A1-4724-98CA-57A101D1B079};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <SandboxedSolution>False</SandboxedSolution>
-	<LangVersion>latest</LangVersion>
-	<Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
     <NullableContextOptions>enable</NullableContextOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -49,7 +49,12 @@
     </Reference>
     <Reference Include="Microsoft.Office.Server, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Server.UserProfiles, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="SPWebPartsCommonLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31070d2c535682f6, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPWebPartsCommon\bin\Debug\SPWebPartsCommonLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -60,6 +65,7 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonConfig.cs" />
     <Compile Include="ConfListUserChanges.cs" />
     <Compile Include="Features\Feature1\Feature1.EventReceiver.cs">
       <DependentUpon>Feature1.feature</DependentUpon>
@@ -85,9 +91,18 @@
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{ef0fd72e-54ce-4f31-91dc-6efc8c6aea47}</FeatureId>
     </None>
+    <None Include="Features\Feature2\Feature2.feature">
+      <FeatureId>{fc0cabe6-0a44-41bd-9ec9-8336bd527871}</FeatureId>
+    </None>
     <None Include="key.snk" />
     <None Include="Layouts\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{70e577df-9b9c-49a4-99a8-b9621471f754}</SharePointProjectItemId>
+    </None>
+    <None Include="List1\List1Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{441f3de3-73d1-4012-a422-4357455c1545}</SharePointProjectItemId>
+    </None>
+    <None Include="List1\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{2a6c4d8b-1bd0-44a7-a5fc-647f8b4ce6b0}</SharePointProjectItemId>
     </None>
     <None Include="Package\Package.package">
       <PackageId>{1f1c6500-ca07-448a-b956-12f8ef830eeb}</PackageId>
@@ -101,7 +116,13 @@
     <Content Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Content>
+    <Content Include="Features\Feature2\Feature2.Template.xml">
+      <DependentUpon>Feature2.feature</DependentUpon>
+    </Content>
     <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx" />
+    <Content Include="List1\Elements.xml" />
+    <Content Include="List1\List1Instance\Elements.xml" />
+    <Content Include="List1\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

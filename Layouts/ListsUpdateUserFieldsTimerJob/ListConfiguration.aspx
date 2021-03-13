@@ -13,7 +13,7 @@
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
     <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr">
-        <asp:TableHeaderRow runat="server" ForeColor="Snow" BackColor="OliveDrab" Font-Bold="true" >
+        <asp:TableHeaderRow runat="server" Font-Bold="true" >
             <asp:TableHeaderCell>Parameter</asp:TableHeaderCell>
             <asp:TableHeaderCell>Value</asp:TableHeaderCell>
         </asp:TableHeaderRow>
@@ -38,7 +38,7 @@
             </asp:TemplateField> 
             <asp:TemplateField HeaderText="Attribute" HeaderStyle-Width="250px">
                 <ItemTemplate>
-                    <asp:DropDownList ID="DropDownList1" runat="server"></asp:DropDownList>
+                    <asp:DropDownList ID="DropDownList1" runat="server" SelectedValue='<%# Eval("Attribute") %>' DataSource='<%# Eval("AttributesList") %>' ></asp:DropDownList>
                 </ItemTemplate> 
             </asp:TemplateField> 
         </Columns>

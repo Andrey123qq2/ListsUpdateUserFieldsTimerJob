@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+	<ListTemplate
+		  Name="CustomListSettings"
+		  Type="100"
+		  BaseType="0"
+		  OnQuickLaunch="TRUE"
+		  SecurityBits="11"
+		  Sequence="410"
+		  DisplayName="CustomListSettings"
+		  Description="Custom List Settings"
+		  Image="/_layouts/images/itgen.png"/>
+	<CustomAction
+		  Id="Custom.Configuration.ListCustomSettings"
+		  GroupId="GeneralSettings"
+		  Location="Microsoft.SharePoint.ListEdit"
+		  RegistrationId = "100"
+		  RequireSiteAdministrator="FALSE"
+	  RegistrationType="List"
+	  Rights="MyList"
+		  Sequence="410"
+		  Title="TimerJob Update User Fields">
+		<UrlAction
+			Url="_layouts/ListsUpdateUserFieldsTimerJob/ListConfiguration.aspx?List={ListId}" />
+	</CustomAction>
+</Elements>

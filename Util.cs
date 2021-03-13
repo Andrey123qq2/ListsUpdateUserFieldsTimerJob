@@ -13,5 +13,20 @@ namespace ListsUpdateUserFieldsTimerJob
         {
             throw new NotImplementedException();
         }
+
+        //TODO: move to common lib
+        public static SPList GetSPList(Guid listGUID)
+        {
+            SPList list;
+
+            using (SPSite site = new SPSite(SPContext.Current.Web.Url))
+            using (SPWeb web = site.OpenWeb())
+            {
+                list = web.Lists[listGUID];
+            }
+
+            return list;
+        }
+
     }
 }

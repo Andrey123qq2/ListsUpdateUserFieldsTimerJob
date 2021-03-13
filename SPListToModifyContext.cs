@@ -18,7 +18,7 @@ namespace ListsUpdateUserFieldsTimerJob
         
         public SPListToModifyContext(SPList list, string confPopertyName)
         {
-            ListToModify = list;
+            CurrentList = list;
             ERConf = SPJsonConf<ConfListUserChanges>.Get(list, confPopertyName);
         }
 
@@ -39,7 +39,7 @@ namespace ListsUpdateUserFieldsTimerJob
 
         public static List<SPListToModifyContext> Factory()
         {
-            string confName = "tj_json_upd_listusrattr";
+            string confName = CommonConfig.LIST_PROPERTY_JSON_CONF;
             List<SPListToModifyContext> listsToChange = Util.GetListsWithJSONConf(confName)
                 .Select(l => new SPListToModifyContext(l, confName))
                 .ToList();
