@@ -11,19 +11,20 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-    <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr">
-        <asp:TableHeaderRow runat="server" Font-Bold="true" >
-            <asp:TableHeaderCell>Parameter</asp:TableHeaderCell>
-            <asp:TableHeaderCell>Value</asp:TableHeaderCell>
-        </asp:TableHeaderRow>
+    <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;" >
         <asp:TableRow ID="TableRow1" runat="server" BackColor="White" >
+            <asp:TableCell>Enable</asp:TableCell>
+            <asp:TableCell>
+                <asp:CheckBox ID="EnableCheckBox" runat="server"></asp:CheckBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow2" runat="server" BackColor="White" >
             <asp:TableCell>UserField</asp:TableCell>
             <asp:TableCell>
                 <asp:DropDownList ID="UserFieldDropDownList" runat="server"></asp:DropDownList>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>
-    <br/>
     <SharePoint:SPGridView ID="FieldsTable" runat="server" AutoGenerateColumns="false">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
@@ -47,9 +48,9 @@
 </asp:Content>
 
 <asp:Content ID="PageTitle" ContentPlaceHolderID="PlaceHolderPageTitle" runat="server">
-TimerJob Settings: update user attribute fields
+TimerJob: update user attribute fields
 </asp:Content>
 
 <asp:Content ID="PageTitleInTitleArea" ContentPlaceHolderID="PlaceHolderPageTitleInTitleArea" runat="server" >
-TimerJob Settings: update user attribute fields
+TimerJob: update user attribute fields
 </asp:Content>

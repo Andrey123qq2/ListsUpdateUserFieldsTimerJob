@@ -51,6 +51,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         private void BindDataToAdditionalTable()
         {
             BindDataToUserField();
+            BindDataToEnableCheckBox();
         }
         private void BindDataToUserField()
         {
@@ -65,7 +66,11 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             UserFieldDropDownList.DataBind();
             UserFieldDropDownList.SelectedValue = String.IsNullOrEmpty(_ERConf.UserField) ? String.Empty : _ERConf.UserField;
         }
-        private void BindDataToFieldsTable()
+        private void BindDataToEnableCheckBox()
+        {
+            EnableCheckBox.Checked = _ERConf.Enable;
+        }
+            private void BindDataToFieldsTable()
         {
             FieldsTable.DataSource = GetDataForFieldsTable();
             FieldsTable.DataBind();
@@ -114,8 +119,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         private void GetAdditionalParamsFromPageToERConf()
         {
             _ERConf.UserField = UserFieldDropDownList.SelectedValue;
+            _ERConf.Enable = EnableCheckBox.Checked;
         }
-
         private void GetFieldsParamsFromPageToERConf()
         {
             var fieldsTableRows = FieldsTable.Rows;

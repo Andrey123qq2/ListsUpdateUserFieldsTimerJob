@@ -8,6 +8,7 @@ namespace ListsUpdateUserFieldsTimerJob
 {
     class ConfListUserChanges
     {
+        public bool Enable;
         public string UserField;
         public Dictionary<string, string> AttributesFieldsMap;
     }

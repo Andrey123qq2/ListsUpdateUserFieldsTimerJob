@@ -33,6 +33,24 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         protected global::System.Web.UI.WebControls.TableRow TableRow1;
 
         /// <summary>
+        /// EnableCheckBox control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox EnableCheckBox;
+
+        /// <summary>
+        /// TableRow2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow TableRow2;
+
+        /// <summary>
         /// UserFieldDropDownList control.
         /// </summary>
         /// <remarks>
