@@ -11,7 +11,6 @@ namespace ListsUpdateUserFieldsTimerJob
     interface ISPListContext
     {
         SPList CurrentList { get; }
-        ConfListUserChanges ERConf { get; }
-        //UserProfileChangeCollection ProfilesChanges { get; }
+        ListConfigUpdateUserFields ERConf { get; }
     }
 }

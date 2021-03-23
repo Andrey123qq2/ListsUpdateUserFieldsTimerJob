@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    interface IProfileChanges
+    enum CAMLQueryType
     {
+        Text,
+        User
     }
 }

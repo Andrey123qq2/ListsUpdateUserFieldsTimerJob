@@ -16,7 +16,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
     public partial class ListConfiguration : LayoutsPageBase
     {
         private SPList _pageSPList;
-        private ConfListUserChanges _ERConf;
+        private ListConfigUpdateUserFields _ERConf;
         private SPFieldCollection _listFields;
         private List<string> _profilesAttributes;
         private string CurrentUrl;
@@ -32,10 +32,10 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         private void InitParams()
         {
             Guid listGuid = new Guid(Request.QueryString["List"]);
-            _pageSPList = Util.GetSPList(listGuid);
+            _pageSPList = SPListHelpers.GetSPList(SPContext.Current.Web.Url, listGuid);
             _listFields = _pageSPList.Fields;
             _profilesAttributes = GetProfilesAttributes();
-            _ERConf = SPJsonConf<ConfListUserChanges>.Get(_pageSPList, CommonConfig.LIST_PROPERTY_JSON_CONF);
+            _ERConf = SPJsonConf<ListConfigUpdateUserFields>.Get(_pageSPList, CommonConstants.LIST_PROPERTY_JSON_CONF);
             CurrentUrl = HttpContext.Current.Request.RawUrl;
         }
         private List<string> GetProfilesAttributes()
@@ -105,8 +105,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 string fieldTitle = field.Title;
                 dataRow.Add(fieldTitle);
                 var ERConfattributeForField = _ERConf.AttributesFieldsMap
-                    ?.FirstOrDefault(p => p.Key == fieldTitle)
-                    .Value;
+                    ?.FirstOrDefault(p => p.Value == fieldTitle)
+                    .Key;
                 string attributeForField = String.IsNullOrEmpty(ERConfattributeForField) ? String.Empty : ERConfattributeForField;
                 dataRow.Add(attributeForField);
                 dataRow.Add(optionsAttributes.ToArray());
@@ -134,14 +134,14 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 string attributeForField = ((DropDownList)(attributeCell.FindControl("DropDownList1"))).SelectedValue;
                 if (String.IsNullOrEmpty(attributeForField))
                     continue;
-                attributesFieldsMap.Add(fieldName, attributeForField);
+                attributesFieldsMap.Add(attributeForField, fieldName);
             }
             _ERConf.AttributesFieldsMap = attributesFieldsMap;
         }
 
         private void SaveERConfToListPropertyBag()
         {
-            SPJsonConf<ConfListUserChanges>.Set(_pageSPList, CommonConfig.LIST_PROPERTY_JSON_CONF, _ERConf);
+            SPJsonConf<ListConfigUpdateUserFields>.Set(_pageSPList, CommonConstants.LIST_PROPERTY_JSON_CONF, _ERConf);
         }
         #endregion
         protected void ButtonOK_EventHandler(object sender, EventArgs e)

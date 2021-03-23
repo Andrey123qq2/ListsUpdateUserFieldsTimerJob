@@ -65,14 +65,16 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonConfig.cs" />
-    <Compile Include="ConfListUserChanges.cs" />
+    <Compile Include="TimerJob\CommonConstants.cs" />
+    <Compile Include="TimerJob\ListConfigUpdateUserFields.cs" />
+    <Compile Include="Helpers\CAMLQueryType.cs" />
+    <Compile Include="Helpers\DisableItemEvents.cs" />
     <Compile Include="Features\Feature1\Feature1.EventReceiver.cs">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Compile>
-    <Compile Include="ISPListModifierStrategy.cs" />
-    <Compile Include="IProfileChanges.cs" />
-    <Compile Include="ISPListContext.cs" />
+    <Compile Include="Helpers\SPFieldHelpers.cs" />
+    <Compile Include="TimerJob\Components\ISPListModifierStrategy.cs" />
+    <Compile Include="TimerJob\ISPListContext.cs" />
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.cs">
       <DependentUpon>ListConfiguration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -80,12 +82,13 @@
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.designer.cs">
       <DependentUpon>ListConfiguration.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="SPListToModifyContext.cs" />
-    <Compile Include="SPListUserAttributesStrategy.cs" />
-    <Compile Include="ProfilesChangesManager.cs" />
+    <Compile Include="Helpers\SPListHelpers.cs" />
+    <Compile Include="TimerJob\SPListToModifyContext.cs" />
+    <Compile Include="TimerJob\Components\SPListUserAttributesStrategy.cs" />
+    <Compile Include="Helpers\ProfilesChangesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimerJob.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="TimerJob\TimerJob.cs" />
+    <Compile Include="Helpers\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Features\Feature1\Feature1.feature">

@@ -18,9 +18,9 @@ namespace ListsUpdateUserFieldsTimerJob
         private SPSite _site;
         //private static readonly ProfilesChangesManager _instance = new ProfilesChangesManager();
         //public static ProfilesChangesManager Instance => _instance;
-        public ProfilesChangesManager()
+        public ProfilesChangesManager(string siteUrl)
         {
-            _site = new SPSite("https://dev-info.deps.kiev.ua");
+            _site = new SPSite(siteUrl);
             SPServiceContext context = SPServiceContext.GetContext(_site);
             _profileManager = new UserProfileManager(context);
         }
@@ -35,7 +35,7 @@ namespace ListsUpdateUserFieldsTimerJob
             UserProfileChangeQuery changeQuery = new UserProfileChangeQuery(false, true)
             {
                 ChangeTokenStart = changeToken,
-                SingleValueProperty = true,
+                SingleValueProperty = true
             };
             UserProfileChangeCollection changes = _profileManager.GetChanges(changeQuery);
             return changes;

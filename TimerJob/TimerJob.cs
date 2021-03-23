@@ -23,7 +23,9 @@ namespace ListsUpdateUserFieldsTimerJob
                 //TODO: AsParallel().ForAll
                 listsToModifyContextes.ForEach(l => UpdateList(l));
 
-            } catch (Exception ex) { }
+            } catch (Exception ex) {
+                throw new Exception("Custom TimerJob exception: " + ex.Message);
+            }
         }
 
         private void UpdateList(SPListToModifyContext listContext)
