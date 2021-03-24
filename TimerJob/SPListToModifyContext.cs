@@ -19,7 +19,7 @@ namespace ListsUpdateUserFieldsTimerJob
         public SPListToModifyContext(SPList list, string confPopertyName)
         {
             CurrentList = list;
-            TJListConf = PropertyBagConf<ListConfigUpdateUserFields>.Get(list.RootFolder.Properties, confPopertyName);
+            TJListConf = PropertyBagConfHelper<ListConfigUpdateUserFields>.Get(list.RootFolder.Properties, confPopertyName);
         }
 
         public void SetStrategy(ISPListModifierStrategy strategy)
@@ -34,7 +34,7 @@ namespace ListsUpdateUserFieldsTimerJob
 
         public static List<SPListToModifyContext> Factory(string siteUrl)
         {
-            List<SPListToModifyContext> listsToChange = Util.GetListsWithJSONConf(siteUrl, CommonConstants.LIST_PROPERTY_JSON_CONF)
+            List<SPListToModifyContext> listsToChange = SPListHelpers.GetListsWithJSONConf(siteUrl, CommonConstants.LIST_PROPERTY_JSON_CONF)
                 .Select(l => new SPListToModifyContext(l, CommonConstants.LIST_PROPERTY_JSON_CONF))
                 .ToList();
             return listsToChange;

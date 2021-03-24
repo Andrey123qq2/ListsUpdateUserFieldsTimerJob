@@ -3,7 +3,6 @@ using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using SPHelpers;
@@ -17,7 +16,10 @@ namespace ListsUpdateUserFieldsTimerJob
         public void UpdateItems(SPListToModifyContext context)
         {
             _listContext = context;
-            using var profilesChangesManager = new ProfilesChangesManager(_listContext.CurrentList.ParentWeb.Site.Url);
+            using var profilesChangesManager = new ProfilesChangesManager(
+                _listContext.CurrentList.ParentWeb.Site.Url, 
+                CommonConstants.CHANGE_MANAGER_DAYS_TO_CHECK
+            );
             if (!context.TJListConf.Enable)
                 return;
             _profilesChanges = profilesChangesManager.GetChanges();

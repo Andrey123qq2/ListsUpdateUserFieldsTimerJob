@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SPHelpers
 {
-    static class SPWebApplicationHelpers
+    static class SPWebApplicationExtensions
     {
         public static List<SPSite> GetSitesWithFeature(this SPWebApplication webApp, string featureName)
         {

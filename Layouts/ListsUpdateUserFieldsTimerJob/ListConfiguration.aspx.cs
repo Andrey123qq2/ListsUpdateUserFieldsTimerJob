@@ -35,12 +35,19 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             _pageSPList = SPListHelpers.GetSPList(SPContext.Current.Web.Url, listGuid);
             _listFields = _pageSPList.Fields;
             _profilesAttributes = GetProfilesAttributes();
-            _TJListConf = PropertyBagConf<ListConfigUpdateUserFields>.Get(_pageSPList.RootFolder.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
+            _TJListConf = PropertyBagConfHelper<ListConfigUpdateUserFields>.Get(
+                _pageSPList.RootFolder.Properties, 
+                CommonConstants.LIST_PROPERTY_JSON_CONF
+            );
         }
         private List<string> GetProfilesAttributes()
         {
-            var timerJob = _pageSPList.ParentWeb.Site.WebApplication.JobDefinitions.FirstOrDefault(n => n.Name == CommonConstants.TIMER_JOB_NAME);
-            var tjConf = PropertyBagConf<TimerJobConfig>.Get(timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
+            var timerJob = _pageSPList.ParentWeb.Site.WebApplication.JobDefinitions
+                .FirstOrDefault(n => n.Name == CommonConstants.TIMER_JOB_NAME);
+            var tjConf = PropertyBagConfHelper<TimerJobConfig>.Get(
+                timerJob.Properties, 
+                CommonConstants.LIST_PROPERTY_JSON_CONF
+            );
             List<string> profilesAttributes = tjConf.AttributesOptInLists;
             return profilesAttributes;
         }
@@ -105,17 +112,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                     continue;
                 List<object> dataRow = new List<object> { };
                 // Order should be same as in AddColumnsToDataTable
-                // data for columns FieldName, Attribute, AttributesList
                 string fieldTitle = field.Title;
                 var tjListConfattributeForField = _TJListConf.AttributesFieldsMap
                     ?.FirstOrDefault(p => p.Value == fieldTitle)
                     .Key;
                 string selectAttributeForField = String.IsNullOrEmpty(tjListConfattributeForField) ? String.Empty : tjListConfattributeForField;
-                //if (!optionsAttributes.Contains(selectAttributeForField))
-                //        optionsAttributes.Add(selectAttributeForField);
                 Array optionsAttributesArray = optionsAttributes.Union(new List<string> { selectAttributeForField }).ToArray();
-                //Array optionsAttributesArray = optionsAttributes.ToArray();
-                //optionsAttributes.Remove(selectAttributeForField);
                 dataRow.Add(fieldTitle);
                 dataRow.Add(selectAttributeForField);
                 dataRow.Add(optionsAttributesArray);
@@ -149,7 +151,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 
         private void SaveERConfToListPropertyBag()
         {
-            PropertyBagConf<ListConfigUpdateUserFields>.Set(_pageSPList.RootFolder.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJListConf);
+            PropertyBagConfHelper<ListConfigUpdateUserFields>.Set(_pageSPList.RootFolder.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJListConf);
             _pageSPList.Update();
         }
         #endregion

@@ -12,14 +12,12 @@ namespace SPHelpers
 {
     class ProfilesChangesManager : IDisposable
     {
-        public static int DaysToCheck = 3;
-        //public UserProfileChangeCollection RecentChanges { get; private set; }
+        private static int _daysToCheck;
         private readonly UserProfileManager _profileManager;
         private readonly SPSite _site;
-        //private static readonly ProfilesChangesManager _instance = new ProfilesChangesManager();
-        //public static ProfilesChangesManager Instance => _instance;
-        public ProfilesChangesManager(string siteUrl)
+        public ProfilesChangesManager(string siteUrl, int daysToCheck)
         {
+            _daysToCheck = daysToCheck;
             _site = new SPSite(siteUrl);
             SPServiceContext context = SPServiceContext.GetContext(_site);
             _profileManager = new UserProfileManager(context);
@@ -30,7 +28,7 @@ namespace SPHelpers
         }
         public UserProfileChangeCollection GetChanges()
         {
-            DateTime startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(DaysToCheck));
+            DateTime startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(_daysToCheck));
             UserProfileChangeToken changeToken = new UserProfileChangeToken(startDate);
             UserProfileChangeQuery changeQuery = new UserProfileChangeQuery(false, true)
             {
@@ -40,18 +38,5 @@ namespace SPHelpers
             UserProfileChangeCollection changes = _profileManager.GetChanges(changeQuery);
             return changes;
         }
-
-        //public List<string> GetProfilesAttributes()
-        //{
-        //    SPServiceContext serviceContext = SPServiceContext.GetContext(_site);
-        //    ProfileSubtypeManager profileSubtypeMgr = ProfileSubtypeManager.Get(serviceContext);
-        //    ProfileSubtype profileSubtype = profileSubtypeMgr.GetProfileSubtype(ProfileSubtypeManager.GetDefaultProfileName(ProfileType.User));
-        //    ProfileSubtypePropertyManager profileSubtypePropertyMgr = profileSubtype.Properties;
-        //    List<string> profileProperties = profileSubtypePropertyMgr.PropertiesWithSection
-        //        .ToArray().ToList()
-        //        .Select(p => ((ProfileSubtypeProperty)p).Name)
-        //        .ToList();
-        //    return profileProperties;
-        //}
     }
 }

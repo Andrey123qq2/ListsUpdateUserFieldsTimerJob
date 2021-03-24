@@ -13,7 +13,6 @@ namespace SPHelpers
             { CAMLQueryType.User, @"<Where><Eq><FieldRef Name='{0}' LookupId='True' /><Value Type = 'User'>{1}</Value></Eq></Where>" },
             { CAMLQueryType.Text, @"<Where><Eq><FieldRef Name='{0}'/><Value Type = 'Text'>{1}</Value></Eq></Where>"}
         };
-        //TODO: move to common lib
         public static SPList GetSPList(string webUrl, Guid listGUID)
         {
             SPList list;
@@ -49,6 +48,21 @@ namespace SPHelpers
             };
             SPListItemCollection items = list.GetItems(spQuery);
             return items;
+        }
+        public static List<SPList> GetListsWithJSONConf(string siteUrl, string confFilter)
+        {
+            var listsWithJSONConf = new List<SPList>();
+            using (SPSite site = new SPSite(siteUrl))
+            {
+                site.AllWebs.Cast<SPWeb>().ToList().ForEach(w =>
+                {
+                    w.Lists.Cast<SPList>().ToList()
+                    .Where(l => l.RootFolder.Properties.Contains(confFilter))
+                    .ToList()
+                    .ForEach(l => listsWithJSONConf.Add(l));
+                });
+            }
+            return listsWithJSONConf;
         }
     }
 }

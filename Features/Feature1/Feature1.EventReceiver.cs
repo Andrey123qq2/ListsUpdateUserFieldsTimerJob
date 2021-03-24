@@ -48,7 +48,6 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
                         EndMinute = 15,
                     }
                 };
-
                 job.Update();
             }
             catch (Exception)
@@ -80,7 +79,6 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
 
         public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
         {
-
             lock (this)
             {
                 try
@@ -97,37 +95,5 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
                 }
             }
         }
-        // Uncomment the method below to handle the event raised after a feature has been activated.
-
-        //public override void FeatureActivated(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-
-        // Uncomment the method below to handle the event raised before a feature is deactivated.
-
-        //public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-
-        // Uncomment the method below to handle the event raised after a feature has been installed.
-
-        //public override void FeatureInstalled(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-
-        // Uncomment the method below to handle the event raised before a feature is uninstalled.
-
-        //public override void FeatureUninstalling(SPFeatureReceiverProperties properties)
-        //{
-        //}
-
-        // Uncomment the method below to handle the event raised when a feature is upgrading.
-
-        //public override void FeatureUpgrading(SPFeatureReceiverProperties properties, string upgradeActionName, System.Collections.Generic.IDictionary<string, string> parameters)
-        //{
-        //}
     }
 }

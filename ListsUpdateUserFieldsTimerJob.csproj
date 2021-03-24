@@ -68,7 +68,7 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SPHelpers\SPWebApplicationHelpers.cs" />
+    <Compile Include="SPHelpers\SPWebApplicationExtensions.cs" />
     <Compile Include="SPHelpers\PropertyBagConf.cs" />
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx.cs">
       <DependentUpon>TimerJobSettings.aspx</DependentUpon>
@@ -101,7 +101,6 @@
     <Compile Include="SPHelpers\ProfilesChangesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerJob\_TimerJob.cs" />
-    <Compile Include="SPHelpers\Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -109,20 +108,53 @@
       <FeatureId>{ef0fd72e-54ce-4f31-91dc-6efc8c6aea47}</FeatureId>
     </None>
     <None Include="Features\Feature2\Feature2.feature">
-      <FeatureId>{fc0cabe6-0a44-41bd-9ec9-8336bd527871}</FeatureId>
-    </None>
-    <None Include="Features\Feature3\Feature3.feature">
       <FeatureId>{989031a3-4897-4d0e-931d-00c25f1afa1e}</FeatureId>
     </None>
     <None Include="key.snk" />
     <None Include="Layouts\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{70e577df-9b9c-49a4-99a8-b9621471f754}</SharePointProjectItemId>
     </None>
-    <None Include="List1\List1Instance\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List1\List1Instance\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{441f3de3-73d1-4012-a422-4357455c1545}</SharePointProjectItemId>
     </None>
-    <None Include="List1\SharePointProjectItem.spdata">
+    <None Include="ListsDefinitions\List1\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{2a6c4d8b-1bd0-44a7-a5fc-647f8b4ce6b0}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List2\List2Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{0a7343d2-ff77-46f9-b810-3fe77edccf64}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List2\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{bc34aafb-b5b9-4a5b-b2a7-94e80b2123e0}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List3\List3Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f25fa875-8a45-463e-a637-996dea980861}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List3\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{29b8fdd0-28a7-4d19-b0b2-b46b1041d828}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List4\List4Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{7af47fa1-234a-47ef-b0bf-2f895356eded}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List4\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{460bdf42-fbe3-4016-97a4-2e4280333a25}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List5\List5Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{f2200f4f-0113-4a27-8410-4be78fc52d8b}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List5\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{c85710bb-73b9-4029-8a11-84209c3152bd}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List6\List6Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{53b6aeef-00bd-4f6c-a0f5-96188df34523}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List6\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{fe2c986d-aafb-43b8-a019-27c016401012}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List7\List7Instance\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{a1cade4b-3899-48a8-a1ee-0233e22cae36}</SharePointProjectItemId>
+    </None>
+    <None Include="ListsDefinitions\List7\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{70cfdcc5-ff45-4cb9-bfbf-881c6df8728e}</SharePointProjectItemId>
     </None>
     <None Include="packages.config" />
     <None Include="Package\Package.package">
@@ -140,14 +172,29 @@
     <Content Include="Features\Feature2\Feature2.Template.xml">
       <DependentUpon>Feature2.feature</DependentUpon>
     </Content>
-    <Content Include="Features\Feature3\Feature3.Template.xml">
-      <DependentUpon>Feature3.feature</DependentUpon>
-    </Content>
     <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx" />
     <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx" />
-    <Content Include="List1\Elements.xml" />
-    <Content Include="List1\List1Instance\Elements.xml" />
-    <Content Include="List1\Schema.xml" />
+    <Content Include="ListsDefinitions\List1\Elements.xml" />
+    <Content Include="ListsDefinitions\List1\List1Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List1\Schema.xml" />
+    <Content Include="ListsDefinitions\List2\Elements.xml" />
+    <Content Include="ListsDefinitions\List2\List2Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List2\Schema.xml" />
+    <Content Include="ListsDefinitions\List3\Elements.xml" />
+    <Content Include="ListsDefinitions\List3\List3Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List3\Schema.xml" />
+    <Content Include="ListsDefinitions\List4\Elements.xml" />
+    <Content Include="ListsDefinitions\List4\List4Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List4\Schema.xml" />
+    <Content Include="ListsDefinitions\List5\Elements.xml" />
+    <Content Include="ListsDefinitions\List5\List5Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List5\Schema.xml" />
+    <Content Include="ListsDefinitions\List6\Elements.xml" />
+    <Content Include="ListsDefinitions\List6\List6Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List6\Schema.xml" />
+    <Content Include="ListsDefinitions\List7\Elements.xml" />
+    <Content Include="ListsDefinitions\List7\List7Instance\Elements.xml" />
+    <Content Include="ListsDefinitions\List7\Schema.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

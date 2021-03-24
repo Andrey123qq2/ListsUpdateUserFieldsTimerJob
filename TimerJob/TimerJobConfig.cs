@@ -8,7 +8,6 @@ namespace ListsUpdateUserFieldsTimerJob
 {
     class TimerJobConfig
     {
-        //public string SiteUrl;
         public List<string> AttributesOptInLists = new List<string>();
     }
 }

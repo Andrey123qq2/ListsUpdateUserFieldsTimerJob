@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SPHelpers
 {
-    public class PropertyBagConf<T>
+    public class PropertyBagConfHelper<T>
     {
         public static T Get(Hashtable properties, string propertyName)
         {

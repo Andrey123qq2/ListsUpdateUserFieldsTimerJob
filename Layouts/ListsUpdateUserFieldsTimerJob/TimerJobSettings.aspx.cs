@@ -2,14 +2,11 @@
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.WebControls;
-using SPSCommon.SPJsonConf;
+using SPHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
-using SPHelpers;
 using System.Web.UI.WebControls;
 
 namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
@@ -25,7 +22,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             InitParams();
             if (IsPostBack)
                 return;
-            //BindDataToAdditionalTable();
             BindDataToAttributesTable();
         }
 
@@ -33,7 +29,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         {
             _currentSite = SPContext.Current.Site;
             _timerJob = _currentSite.WebApplication.JobDefinitions.FirstOrDefault(n => n.Name == CommonConstants.TIMER_JOB_NAME);
-            _TJConf = PropertyBagConf<TimerJobConfig>.Get(_timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
+            _TJConf = PropertyBagConfHelper<TimerJobConfig>.Get(_timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
             _profilesAttributes = GetProfilesAttributes();
         }
         private List<string> GetProfilesAttributes()
@@ -50,10 +46,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         }
 
         #region BindData to Page
-        //private void BindDataToAdditionalTable()
-        //{
-        //    EnableCheckBox.Checked = !String.IsNullOrEmpty(_TJConf.SiteUrl);
-        //}
         private void BindDataToAttributesTable()
         {
             AttributesTable.DataSource = GetDataForAttributesTable();
@@ -93,10 +85,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         #endregion
 
         #region SaveData From Page to PropertyBag
-        //private void GetAdditionalParamsFromPageToTJConf()
-        //{
-        //    _TJConf.SiteUrl = EnableCheckBox.Checked ? _currentSite.Url : String.Empty;
-        //}
         private void GetAttributesParamsFromPageToTJConf()
         {
             var attributesTableRows = AttributesTable.Rows;
@@ -115,13 +103,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 
         private void SaveTJConfToPropertyBag()
         {
-            PropertyBagConf<TimerJobConfig>.Set(_timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJConf);
+            PropertyBagConfHelper<TimerJobConfig>.Set(_timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJConf);
             _timerJob.Update();
         }
         #endregion
         protected void ButtonOK_EventHandler(object sender, EventArgs e)
         {
-            //GetAdditionalParamsFromPageToTJConf();
             GetAttributesParamsFromPageToTJConf();
             SaveTJConfToPropertyBag();
             RedirectToPreviousPageBySource();
