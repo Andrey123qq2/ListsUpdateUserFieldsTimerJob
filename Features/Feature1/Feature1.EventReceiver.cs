@@ -3,6 +3,7 @@ using Microsoft.SharePoint.Administration;
 using System;
 using System.Runtime.InteropServices;
 using System.Security.Permissions;
+using ListsUpdateUserFieldsTimerJob;
 
 namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
 {
@@ -16,7 +17,6 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
     [Guid("1ca3b581-cd4f-446e-b609-959cec52626e")]
     public class Feature1EventReceiver : SPFeatureReceiver
     {
-        const string JobName = "Lists Update User Fields TimerJob";
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
             try
@@ -24,7 +24,7 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
                 SPSecurity.RunWithElevatedPrivileges(delegate ()
                 {
                     SPWebApplication parentWebApp = (SPWebApplication)properties.Feature.Parent;
-                    DeleteExistingJob(JobName, parentWebApp);
+                    DeleteExistingJob(CommonConstants.TIMER_JOB_NAME, parentWebApp);
                     CreateJob(parentWebApp);
                 });
             }
@@ -38,13 +38,15 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
             bool jobCreated = false;
             try
             {
-                TimerJob job = new TimerJob(JobName, site);
-                job.Schedule = new SPDailySchedule()
+                TimerJob job = new TimerJob(CommonConstants.TIMER_JOB_NAME, site)
                 {
-                    BeginHour = 7,
-                    EndHour = 8,
-                    BeginMinute = 0,
-                    EndMinute = 15,
+                    Schedule = new SPDailySchedule()
+                    {
+                        BeginHour = 7,
+                        EndHour = 8,
+                        BeginMinute = 0,
+                        EndMinute = 15,
+                    }
                 };
 
                 job.Update();
@@ -86,7 +88,7 @@ namespace ListsUpdateUserFieldsTimerJob.Features.Feature1
                     SPSecurity.RunWithElevatedPrivileges(delegate ()
                     {
                         SPWebApplication parentWebApp = (SPWebApplication)properties.Feature.Parent;
-                        DeleteExistingJob(JobName, parentWebApp);
+                        DeleteExistingJob(CommonConstants.TIMER_JOB_NAME, parentWebApp);
                     });
                 }
                 catch (Exception ex)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml;
 using System.Text;
 using System.Threading.Tasks;
+using SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
@@ -17,7 +18,7 @@ namespace ListsUpdateUserFieldsTimerJob
         {
             _listContext = context;
             using var profilesChangesManager = new ProfilesChangesManager(_listContext.CurrentList.ParentWeb.Site.Url);
-            if (!context.ERConf.Enable)
+            if (!context.TJListConf.Enable)
                 return;
             _profilesChanges = profilesChangesManager.GetChanges();
             var changesGroupedByUsers = GetChangesGroupedByUser();
@@ -47,12 +48,12 @@ namespace ListsUpdateUserFieldsTimerJob
         private Dictionary<string, object> GetFieldsNewValuesMap(IGrouping<string, UserProfileChange> changedProperties)
         {
             Dictionary<string, object> fieldsNewValuesMap = changedProperties.ToList()
-                .Where(c => _listContext.ERConf.AttributesFieldsMap.ContainsKey(((UserProfileSingleValueChange)c).ProfileProperty.Name))
+                .Where(c => _listContext.TJListConf.AttributesFieldsMap.ContainsKey(((UserProfileSingleValueChange)c).ProfileProperty.Name))
                 .OrderByDescending(c => c.EventTime)
                 .GroupBy(c => ((UserProfileSingleValueChange)c).ProfileProperty.Name)
                 .Select(g => g.First())
                 .ToDictionary(
-                    c => _listContext.ERConf.AttributesFieldsMap[((UserProfileSingleValueChange)c).ProfileProperty.Name],
+                    c => _listContext.TJListConf.AttributesFieldsMap[((UserProfileSingleValueChange)c).ProfileProperty.Name],
                     c => GetFieldValueFromProfileChange(c)
                 );
             return fieldsNewValuesMap;
@@ -62,7 +63,7 @@ namespace ListsUpdateUserFieldsTimerJob
         {
             object fieldNewValue;
             string changedPropertyName = ((UserProfileSingleValueChange)profileChange).ProfileProperty.Name;
-            string listFieldName = _listContext.ERConf.AttributesFieldsMap[changedPropertyName];
+            string listFieldName = _listContext.TJListConf.AttributesFieldsMap[changedPropertyName];
             SPField listField = _listContext.CurrentList.Fields.GetField(listFieldName);
             string listFieldTypeName = listField.TypeAsString;
             var profileNewValue = ((UserProfileSingleValueChange)profileChange).NewValue;
@@ -101,7 +102,7 @@ namespace ListsUpdateUserFieldsTimerJob
 
         private SPListItemCollection GetUserItems(string userLogin)
         {
-            string fieldName = _listContext.ERConf.UserField;
+            string fieldName = _listContext.TJListConf.UserField;
             string fieldInternalName = _listContext.CurrentList.Fields.GetField(fieldName).InternalName;
             SPUser spUser = _listContext.CurrentList.ParentWeb.EnsureUser(userLogin);
             SPListItemCollection items = _listContext.CurrentList.QueryItems(fieldInternalName, spUser.ID.ToString(), CAMLQueryType.User);

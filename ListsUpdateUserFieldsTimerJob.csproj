@@ -49,6 +49,9 @@
     </Reference>
     <Reference Include="Microsoft.Office.Server, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Office.Server.UserProfiles, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SPWebPartsCommonLib, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31070d2c535682f6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SPWebPartsCommon\bin\Debug\SPWebPartsCommonLib.dll</HintPath>
@@ -65,14 +68,24 @@
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SPHelpers\SPWebApplicationHelpers.cs" />
+    <Compile Include="SPHelpers\PropertyBagConf.cs" />
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx.cs">
+      <DependentUpon>TimerJobSettings.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx.designer.cs">
+      <DependentUpon>TimerJobSettings.aspx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TimerJob\TimerJobConfig.cs" />
     <Compile Include="TimerJob\CommonConstants.cs" />
     <Compile Include="TimerJob\ListConfigUpdateUserFields.cs" />
-    <Compile Include="Helpers\CAMLQueryType.cs" />
-    <Compile Include="Helpers\DisableItemEvents.cs" />
+    <Compile Include="SPHelpers\CAMLQueryType.cs" />
+    <Compile Include="SPHelpers\DisableItemEvents.cs" />
     <Compile Include="Features\Feature1\Feature1.EventReceiver.cs">
       <DependentUpon>Feature1.feature</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\SPFieldHelpers.cs" />
+    <Compile Include="SPHelpers\SPFieldHelpers.cs" />
     <Compile Include="TimerJob\Components\ISPListModifierStrategy.cs" />
     <Compile Include="TimerJob\ISPListContext.cs" />
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.cs">
@@ -82,20 +95,24 @@
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.designer.cs">
       <DependentUpon>ListConfiguration.aspx.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\SPListHelpers.cs" />
+    <Compile Include="SPHelpers\SPListHelpers.cs" />
     <Compile Include="TimerJob\SPListToModifyContext.cs" />
     <Compile Include="TimerJob\Components\SPListUserAttributesStrategy.cs" />
-    <Compile Include="Helpers\ProfilesChangesManager.cs" />
+    <Compile Include="SPHelpers\ProfilesChangesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimerJob\TimerJob.cs" />
-    <Compile Include="Helpers\Util.cs" />
+    <Compile Include="TimerJob\_TimerJob.cs" />
+    <Compile Include="SPHelpers\Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{ef0fd72e-54ce-4f31-91dc-6efc8c6aea47}</FeatureId>
     </None>
     <None Include="Features\Feature2\Feature2.feature">
       <FeatureId>{fc0cabe6-0a44-41bd-9ec9-8336bd527871}</FeatureId>
+    </None>
+    <None Include="Features\Feature3\Feature3.feature">
+      <FeatureId>{989031a3-4897-4d0e-931d-00c25f1afa1e}</FeatureId>
     </None>
     <None Include="key.snk" />
     <None Include="Layouts\SharePointProjectItem.spdata">
@@ -107,6 +124,7 @@
     <None Include="List1\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{2a6c4d8b-1bd0-44a7-a5fc-647f8b4ce6b0}</SharePointProjectItemId>
     </None>
+    <None Include="packages.config" />
     <None Include="Package\Package.package">
       <PackageId>{1f1c6500-ca07-448a-b956-12f8ef830eeb}</PackageId>
     </None>
@@ -122,7 +140,11 @@
     <Content Include="Features\Feature2\Feature2.Template.xml">
       <DependentUpon>Feature2.feature</DependentUpon>
     </Content>
+    <Content Include="Features\Feature3\Feature3.Template.xml">
+      <DependentUpon>Feature3.feature</DependentUpon>
+    </Content>
     <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx" />
+    <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx" />
     <Content Include="List1\Elements.xml" />
     <Content Include="List1\List1Instance\Elements.xml" />
     <Content Include="List1\Schema.xml" />

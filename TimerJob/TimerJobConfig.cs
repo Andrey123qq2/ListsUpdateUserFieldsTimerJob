@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    enum CAMLQueryType
+    class TimerJobConfig
     {
-        Text,
-        User
+        //public string SiteUrl;
+        public List<string> AttributesOptInLists = new List<string>();
     }
 }

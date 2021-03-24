@@ -1,5 +1,6 @@
 ﻿using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
+using SPHelpers;
 using SPSCommon.SPJsonConf;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,13 @@ namespace ListsUpdateUserFieldsTimerJob
     class SPListToModifyContext : ISPListContext
     {
         public SPList CurrentList { get; }
-        public ListConfigUpdateUserFields ERConf { get; }
+        public ListConfigUpdateUserFields TJListConf { get; }
         private ISPListModifierStrategy _modifierStrategy;
         
         public SPListToModifyContext(SPList list, string confPopertyName)
         {
             CurrentList = list;
-            ERConf = SPJsonConf<ListConfigUpdateUserFields>.Get(list, confPopertyName);
+            TJListConf = PropertyBagConf<ListConfigUpdateUserFields>.Get(list.RootFolder.Properties, confPopertyName);
         }
 
         public void SetStrategy(ISPListModifierStrategy strategy)
@@ -31,9 +32,9 @@ namespace ListsUpdateUserFieldsTimerJob
             _modifierStrategy.UpdateItems(this);
         }
 
-        public static List<SPListToModifyContext> Factory()
+        public static List<SPListToModifyContext> Factory(string siteUrl)
         {
-            List<SPListToModifyContext> listsToChange = Util.GetListsWithJSONConf(CommonConstants.SITE_URL, CommonConstants.LIST_PROPERTY_JSON_CONF)
+            List<SPListToModifyContext> listsToChange = Util.GetListsWithJSONConf(siteUrl, CommonConstants.LIST_PROPERTY_JSON_CONF)
                 .Select(l => new SPListToModifyContext(l, CommonConstants.LIST_PROPERTY_JSON_CONF))
                 .ToList();
             return listsToChange;

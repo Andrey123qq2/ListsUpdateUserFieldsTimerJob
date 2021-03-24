@@ -1,6 +1,5 @@
 ﻿using Microsoft.SharePoint;
 using Microsoft.SharePoint.WebControls;
-using SPSCommon.SPJsonConf;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,16 +9,17 @@ using System.Web.UI.WebControls;
 using System.Linq;
 using System.Configuration;
 using SPWebPartsCommon;
+using SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 {
     public partial class ListConfiguration : LayoutsPageBase
     {
         private SPList _pageSPList;
-        private ListConfigUpdateUserFields _ERConf;
+        private ListConfigUpdateUserFields _TJListConf;
         private SPFieldCollection _listFields;
         private List<string> _profilesAttributes;
-        private string CurrentUrl;
+        private readonly string _currentUrl = HttpContext.Current.Request.RawUrl;
         protected void Page_Load(object sender, EventArgs e)
         {
             InitParams();
@@ -35,15 +35,13 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             _pageSPList = SPListHelpers.GetSPList(SPContext.Current.Web.Url, listGuid);
             _listFields = _pageSPList.Fields;
             _profilesAttributes = GetProfilesAttributes();
-            _ERConf = SPJsonConf<ListConfigUpdateUserFields>.Get(_pageSPList, CommonConstants.LIST_PROPERTY_JSON_CONF);
-            CurrentUrl = HttpContext.Current.Request.RawUrl;
+            _TJListConf = PropertyBagConf<ListConfigUpdateUserFields>.Get(_pageSPList.RootFolder.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
         }
         private List<string> GetProfilesAttributes()
         {
-            SPWeb web = SPControl.GetContextWeb(HttpContext.Current);
-            AppSettingsSection appSettings = WebPartsHelper.GetWebAppSettings(web);
-            string profilesAttributesInSettings = appSettings.Settings["ProfilesAttributes"].Value;
-            List<string> profilesAttributes = profilesAttributesInSettings.Split(',').ToList();
+            var timerJob = _pageSPList.ParentWeb.Site.WebApplication.JobDefinitions.FirstOrDefault(n => n.Name == CommonConstants.TIMER_JOB_NAME);
+            var tjConf = PropertyBagConf<TimerJobConfig>.Get(timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
+            List<string> profilesAttributes = tjConf.AttributesOptInLists;
             return profilesAttributes;
         }
 
@@ -52,6 +50,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         {
             BindDataToUserField();
             BindDataToEnableCheckBox();
+            BindDataToTimerJobUrl();
         }
         private void BindDataToUserField()
         {
@@ -64,13 +63,18 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             personFields.Sort();
             UserFieldDropDownList.DataSource = personFields;
             UserFieldDropDownList.DataBind();
-            UserFieldDropDownList.SelectedValue = String.IsNullOrEmpty(_ERConf.UserField) ? String.Empty : _ERConf.UserField;
+            UserFieldDropDownList.SelectedValue = String.IsNullOrEmpty(_TJListConf.UserField) ? String.Empty : _TJListConf.UserField;
         }
         private void BindDataToEnableCheckBox()
         {
-            EnableCheckBox.Checked = _ERConf.Enable;
+            EnableCheckBox.Checked = _TJListConf.Enable;
         }
-            private void BindDataToFieldsTable()
+        private void BindDataToTimerJobUrl()
+        {
+            TimerJobSettings.NavigateUrl = "/_layouts/15/ListsUpdateUserFieldsTimerJob/TimerJobSettings.aspx?Source=" + _currentUrl;
+            TimerJobSettings.Text = "Common options";
+        }
+        private void BindDataToFieldsTable()
         {
             FieldsTable.DataSource = GetDataForFieldsTable();
             FieldsTable.DataBind();
@@ -103,13 +107,18 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 // Order should be same as in AddColumnsToDataTable
                 // data for columns FieldName, Attribute, AttributesList
                 string fieldTitle = field.Title;
-                dataRow.Add(fieldTitle);
-                var ERConfattributeForField = _ERConf.AttributesFieldsMap
+                var tjListConfattributeForField = _TJListConf.AttributesFieldsMap
                     ?.FirstOrDefault(p => p.Value == fieldTitle)
                     .Key;
-                string attributeForField = String.IsNullOrEmpty(ERConfattributeForField) ? String.Empty : ERConfattributeForField;
-                dataRow.Add(attributeForField);
-                dataRow.Add(optionsAttributes.ToArray());
+                string selectAttributeForField = String.IsNullOrEmpty(tjListConfattributeForField) ? String.Empty : tjListConfattributeForField;
+                //if (!optionsAttributes.Contains(selectAttributeForField))
+                //        optionsAttributes.Add(selectAttributeForField);
+                Array optionsAttributesArray = optionsAttributes.Union(new List<string> { selectAttributeForField }).ToArray();
+                //Array optionsAttributesArray = optionsAttributes.ToArray();
+                //optionsAttributes.Remove(selectAttributeForField);
+                dataRow.Add(fieldTitle);
+                dataRow.Add(selectAttributeForField);
+                dataRow.Add(optionsAttributesArray);
                 fieldsDataTable.Rows.Add(dataRow.ToArray());
             };
         }
@@ -118,14 +127,13 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         #region SaveData From Page to SPList
         private void GetAdditionalParamsFromPageToERConf()
         {
-            _ERConf.UserField = UserFieldDropDownList.SelectedValue;
-            _ERConf.Enable = EnableCheckBox.Checked;
+            _TJListConf.UserField = UserFieldDropDownList.SelectedValue;
+            _TJListConf.Enable = EnableCheckBox.Checked;
         }
         private void GetFieldsParamsFromPageToERConf()
         {
             var fieldsTableRows = FieldsTable.Rows;
             Dictionary<string, string> attributesFieldsMap = new Dictionary<string, string>();
-
             foreach (GridViewRow row in fieldsTableRows)
             {
                 var fieldTitleCell = row.Cells[0];
@@ -136,12 +144,13 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                     continue;
                 attributesFieldsMap.Add(attributeForField, fieldName);
             }
-            _ERConf.AttributesFieldsMap = attributesFieldsMap;
+            _TJListConf.AttributesFieldsMap = attributesFieldsMap;
         }
 
         private void SaveERConfToListPropertyBag()
         {
-            SPJsonConf<ListConfigUpdateUserFields>.Set(_pageSPList, CommonConstants.LIST_PROPERTY_JSON_CONF, _ERConf);
+            PropertyBagConf<ListConfigUpdateUserFields>.Set(_pageSPList.RootFolder.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJListConf);
+            _pageSPList.Update();
         }
         #endregion
         protected void ButtonOK_EventHandler(object sender, EventArgs e)
@@ -159,7 +168,10 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         //TODO: move to common lib
         private void RedirectToParentPage()
         {
-            string listSettingsUrl = Regex.Replace(CurrentUrl, "ListsUpdateUserFieldsTimerJob/ListConfiguration", "listedit", RegexOptions.IgnoreCase);
+            string listSettingsUrl = Regex.Replace(
+                HttpContext.Current.Request.RawUrl, 
+                "ListsUpdateUserFieldsTimerJob/ListConfiguration", "listedit", RegexOptions.IgnoreCase
+            );
             Response.Redirect(listSettingsUrl);
         }
     }

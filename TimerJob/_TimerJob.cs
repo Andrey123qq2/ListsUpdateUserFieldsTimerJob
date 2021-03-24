@@ -1,5 +1,6 @@
 ﻿using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
+using SPHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,25 @@ namespace ListsUpdateUserFieldsTimerJob
         {
             this.Title = jobName;
         }
+        protected override bool HasAdditionalUpdateAccess()
+        {
+            return true;
+        }
         public override void Execute(Guid contentDbId)
         {
-            try {
-                List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory();
-                //TODO: AsParallel().ForAll
-                listsToModifyContextes.ForEach(l => UpdateList(l));
-
+            try
+            {
+                this.WebApplication.GetSitesWithFeature(CommonConstants.TJOB_SITE_FEATURE_NAME)
+                    .ForEach(s => ProcessSite(s));
             } catch (Exception ex) {
                 throw new Exception("Custom TimerJob exception: " + ex.Message);
             }
+        }
+        private void ProcessSite(SPSite site)
+        {
+            List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site.Url);
+            //TODO: AsParallel().ForAll
+            listsToModifyContextes.ForEach(l => UpdateList(l));
         }
 
         private void UpdateList(SPListToModifyContext listContext)
@@ -33,6 +43,5 @@ namespace ListsUpdateUserFieldsTimerJob
             listContext.SetStrategy(new SPListUserAttributesStrategy());
             listContext.UpdateListItems();
         }
-
     }
 }

@@ -8,14 +8,14 @@ using Microsoft.Office.Server.Administration;
 using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 
-namespace ListsUpdateUserFieldsTimerJob
+namespace SPHelpers
 {
     class ProfilesChangesManager : IDisposable
     {
         public static int DaysToCheck = 3;
         //public UserProfileChangeCollection RecentChanges { get; private set; }
-        private UserProfileManager _profileManager;
-        private SPSite _site;
+        private readonly UserProfileManager _profileManager;
+        private readonly SPSite _site;
         //private static readonly ProfilesChangesManager _instance = new ProfilesChangesManager();
         //public static ProfilesChangesManager Instance => _instance;
         public ProfilesChangesManager(string siteUrl)

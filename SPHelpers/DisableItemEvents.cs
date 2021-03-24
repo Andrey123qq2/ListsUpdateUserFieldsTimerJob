@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ListsUpdateUserFieldsTimerJob
+namespace SPHelpers
 {
 	public class DisableItemEvents : SPItemEventReceiver, IDisposable
 	{
-		private bool _EventStatus;
+		private readonly bool _EventStatus;
 		public DisableItemEvents()
 		{
 			_EventStatus = base.EventFiringEnabled;
