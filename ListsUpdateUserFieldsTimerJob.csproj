@@ -97,7 +97,7 @@
     </Compile>
     <Compile Include="SPHelpers\SPListHelpers.cs" />
     <Compile Include="TimerJob\SPListToModifyContext.cs" />
-    <Compile Include="TimerJob\Components\SPListUserAttributesStrategy.cs" />
+    <Compile Include="TimerJob\Components\UpdateUserFieldsByProfileChanges.cs" />
     <Compile Include="SPHelpers\ProfilesChangesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerJob\_TimerJob.cs" />

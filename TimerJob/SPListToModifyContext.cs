@@ -14,7 +14,7 @@ namespace ListsUpdateUserFieldsTimerJob
     {
         public SPList CurrentList { get; }
         public ListConfigUpdateUserFields TJListConf { get; }
-        private ISPListModifierStrategy _modifierStrategy;
+        private static ISPListModifierStrategy _modifierStrategy;
         
         public SPListToModifyContext(SPList list, string confPopertyName)
         {
@@ -22,13 +22,15 @@ namespace ListsUpdateUserFieldsTimerJob
             TJListConf = PropertyBagConfHelper<ListConfigUpdateUserFields>.Get(list.RootFolder.Properties, confPopertyName);
         }
 
-        public void SetStrategy(ISPListModifierStrategy strategy)
+        public static void SetStrategy(ISPListModifierStrategy strategy)
         {
             _modifierStrategy = strategy;
         }
 
         public void UpdateListItems()
         {
+            if (_modifierStrategy == null)
+                return;
             _modifierStrategy.UpdateItems(this);
         }
 

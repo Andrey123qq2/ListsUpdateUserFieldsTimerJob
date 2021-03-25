@@ -33,10 +33,21 @@ namespace SPHelpers
             UserProfileChangeQuery changeQuery = new UserProfileChangeQuery(false, true)
             {
                 ChangeTokenStart = changeToken,
-                SingleValueProperty = true
+                SingleValueProperty = true,
+                UpdateMetadata = false
             };
             UserProfileChangeCollection changes = _profileManager.GetChanges(changeQuery);
             return changes;
+        }
+        public List<IGrouping<string, UserProfileChange>> GetAddModifyChangesGroupedByUser()
+        {
+            var groupedByUserChanges = GetChanges().Cast<UserProfileChange>()
+                .Where(c => {
+                    return c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify;
+                })
+                .GroupBy(p => p.AccountName)
+                .ToList();
+            return groupedByUserChanges;
         }
     }
 }

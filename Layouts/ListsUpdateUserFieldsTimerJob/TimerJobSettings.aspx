@@ -12,15 +12,6 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-
-<%--    <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;" >
-        <asp:TableRow ID="TableRow1" runat="server" BackColor="White" >
-            <asp:TableCell>Enable</asp:TableCell>
-            <asp:TableCell>
-                <asp:CheckBox ID="EnableCheckBox" runat="server"></asp:CheckBox>
-            </asp:TableCell>
-        </asp:TableRow>
-    </asp:Table>--%>
     <SharePoint:SPGridView ID="AttributesTable" runat="server" AutoGenerateColumns="false">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
@@ -44,9 +35,9 @@
 </asp:Content>
 
 <asp:Content ID="PageTitle" ContentPlaceHolderID="PlaceHolderPageTitle" runat="server">
-TimerJob Settings
+TimerJob Common Settings
 </asp:Content>
 
 <asp:Content ID="PageTitleInTitleArea" ContentPlaceHolderID="PlaceHolderPageTitleInTitleArea" runat="server" >
-TimerJob Settings
+TimerJob Common Settings
 </asp:Content>

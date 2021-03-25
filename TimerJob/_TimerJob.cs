@@ -34,14 +34,13 @@ namespace ListsUpdateUserFieldsTimerJob
         private void ProcessSite(SPSite site)
         {
             List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site.Url);
-            //TODO: AsParallel().ForAll
-            listsToModifyContextes.ForEach(l => UpdateList(l));
+            ProcessListsByStrategy1(listsToModifyContextes, site);
         }
-
-        private void UpdateList(SPListToModifyContext listContext)
+        private void ProcessListsByStrategy1(List<SPListToModifyContext> listsToModifyContextes, SPSite site)
         {
-            listContext.SetStrategy(new SPListUserAttributesStrategy());
-            listContext.UpdateListItems();
+            SPListToModifyContext.SetStrategy(new UpdateUserFieldsByProfileChanges(site.Url));
+            //TODO: AsParallel().ForAll
+            listsToModifyContextes.ForEach(c => c.UpdateListItems());
         }
     }
 }

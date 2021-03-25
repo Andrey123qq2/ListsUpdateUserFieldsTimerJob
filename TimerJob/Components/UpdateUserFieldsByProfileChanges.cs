@@ -9,22 +9,24 @@ using SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    class SPListUserAttributesStrategy : ISPListModifierStrategy
+    class UpdateUserFieldsByProfileChanges : ISPListModifierStrategy
     {
-        private UserProfileChangeCollection _profilesChanges;
+        private List<IGrouping<string, UserProfileChange>> _changesGroupedByUsers;
         private SPListToModifyContext _listContext;
-        public void UpdateItems(SPListToModifyContext context)
+        public UpdateUserFieldsByProfileChanges(string siteUrl)
         {
-            _listContext = context;
-            using var profilesChangesManager = new ProfilesChangesManager(
-                _listContext.CurrentList.ParentWeb.Site.Url, 
+            var profilesChangesManager = new ProfilesChangesManager(
+                siteUrl,
                 CommonConstants.CHANGE_MANAGER_DAYS_TO_CHECK
             );
-            if (!context.TJListConf.Enable)
+            _changesGroupedByUsers = profilesChangesManager.GetAddModifyChangesGroupedByUser();
+        }
+        public void UpdateItems(SPListToModifyContext context)
+        {
+            if (context == null || !context.TJListConf.Enable)
                 return;
-            _profilesChanges = profilesChangesManager.GetChanges();
-            var changesGroupedByUsers = GetChangesGroupedByUser();
-            changesGroupedByUsers.ForEach(g => UpdateUserItemsByChanges(g));
+            _listContext = context;
+            _changesGroupedByUsers.ForEach(g => UpdateUserItemsByChanges(g));
         }
 
         private void UpdateUserItemsByChanges(IGrouping<string, UserProfileChange> changedProperties)
@@ -36,16 +38,7 @@ namespace ListsUpdateUserFieldsTimerJob
         }
 
         #region ProfileChanges processing methods
-        private List<IGrouping<string, UserProfileChange>> GetChangesGroupedByUser()
-        {
-            var groupedByUserChanges = _profilesChanges.Cast<UserProfileChange>()
-                .Where(c => {
-                    return c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify;
-                })
-                .GroupBy(p => p.AccountName)
-                .ToList();
-            return groupedByUserChanges;
-        }
+
 
         private Dictionary<string, object> GetFieldsNewValuesMap(IGrouping<string, UserProfileChange> changedProperties)
         {

@@ -14,7 +14,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
     public partial class TimerJobSettings : LayoutsPageBase
     {
         private SPSite _currentSite;
-        private SPJobDefinition _timerJob;
         private TimerJobConfig _TJConf;
         private List<string> _profilesAttributes;
         protected void Page_Load(object sender, EventArgs e)
@@ -28,8 +27,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         private void InitParams()
         {
             _currentSite = SPContext.Current.Site;
-            _timerJob = _currentSite.WebApplication.JobDefinitions.FirstOrDefault(n => n.Name == CommonConstants.TIMER_JOB_NAME);
-            _TJConf = PropertyBagConfHelper<TimerJobConfig>.Get(_timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF);
+            _TJConf = PropertyBagConfHelper<TimerJobConfig>.Get(_currentSite.RootWeb.AllProperties, CommonConstants.LIST_PROPERTY_JSON_CONF);
+            
             _profilesAttributes = GetProfilesAttributes();
         }
         private List<string> GetProfilesAttributes()
@@ -103,8 +102,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 
         private void SaveTJConfToPropertyBag()
         {
-            PropertyBagConfHelper<TimerJobConfig>.Set(_timerJob.Properties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJConf);
-            _timerJob.Update();
+            PropertyBagConfHelper<TimerJobConfig>.Set(_currentSite.RootWeb.AllProperties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJConf);
+            _currentSite.RootWeb.Update();
         }
         #endregion
         protected void ButtonOK_EventHandler(object sender, EventArgs e)

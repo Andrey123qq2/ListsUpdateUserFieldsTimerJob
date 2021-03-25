@@ -42,10 +42,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         }
         private List<string> GetProfilesAttributes()
         {
-            var timerJob = _pageSPList.ParentWeb.Site.WebApplication.JobDefinitions
-                .FirstOrDefault(n => n.Name == CommonConstants.TIMER_JOB_NAME);
             var tjConf = PropertyBagConfHelper<TimerJobConfig>.Get(
-                timerJob.Properties, 
+                _pageSPList.ParentWeb.Site.RootWeb.AllProperties, 
                 CommonConstants.LIST_PROPERTY_JSON_CONF
             );
             List<string> profilesAttributes = tjConf.AttributesOptInLists;
