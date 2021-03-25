@@ -11,7 +11,7 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-    <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;" >
+    <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;margin-top:20px;" >
         <asp:TableRow ID="TableRow1" runat="server" BackColor="White" >
             <asp:TableCell>Enable</asp:TableCell>
             <asp:TableCell>
@@ -35,7 +35,6 @@
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
-        <HeaderStyle />
         <Columns>
             <asp:TemplateField HeaderText="Field" HeaderStyle-Width="250px">
                 <ItemTemplate>

@@ -84,9 +84,19 @@ namespace ListsUpdateUserFieldsTimerJob
             {
                 changedAttributes
                     .ToList()
-                    .ForEach(p => {
+                    .ForEach(p =>
+                    {
                         var fieldForAttribute = p.Key;
-                        i[fieldForAttribute] = p.Value;
+                        try
+                        {
+                            i[fieldForAttribute] = p.Value;
+                        }
+                        catch (Exception ex)
+                        {
+                            var message = String.Format(CommonConstants.ERROR_MESSAGE_TEMPLATE, i.ParentList.ID, i.ID, ex.ToString());
+                            SPLogger.WriteLog(SPLogger.Category.Unexpected, "Item FieldValue Error", message);
+                            return;
+                        }
                     });
                 using (new DisableItemEvents())
                 {

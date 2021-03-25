@@ -12,11 +12,10 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
-    <SharePoint:SPGridView ID="AttributesTable" runat="server" AutoGenerateColumns="false">
+    <SharePoint:SPGridView ID="AttributesTable" runat="server" AutoGenerateColumns="false" style="margin-top:20px;">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />
         <HeaderStyle Font-Bold="true" HorizontalAlign="Left" CssClass="ms-viewheadertr" />
-        <HeaderStyle />
         <Columns>
             <asp:TemplateField HeaderText="Attribute" HeaderStyle-Width="250px">
                 <ItemTemplate>
