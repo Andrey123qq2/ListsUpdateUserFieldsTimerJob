@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    class ListConfigUpdateUserFields
+    public class ListConfigUpdateUserFields
     {
         public bool Enable;
         public string UserField;

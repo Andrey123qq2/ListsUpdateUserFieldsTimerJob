@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    interface ISPListModifierStrategy
+    public interface ISPListModifierStrategy
     {
-        void UpdateItems(SPListToModifyContext context);
+        public void UpdateItems(SPListToModifyContext context);
     }
 }

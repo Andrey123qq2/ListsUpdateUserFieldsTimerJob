@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    class SPListToModifyContext : ISPListContext
+    public class SPListToModifyContext : ISPListContext
     {
         public SPList CurrentList { get; }
         public ListConfigUpdateUserFields TJListConf { get; }

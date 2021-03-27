@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListsUpdateUserFieldsTimerJob", "ListsUpdateUserFieldsTimerJob.csproj", "{2C18FBAF-15BE-4A1D-8B14-677D36F93A7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListsUpdateUserFieldsTimerJobTests", "..\ListsUpdateUserFieldsTimerJobTests\ListsUpdateUserFieldsTimerJobTests.csproj", "{783F32BD-3DA6-463C-BDE3-361D20AF8E4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +19,10 @@ Global
 		{2C18FBAF-15BE-4A1D-8B14-677D36F93A7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C18FBAF-15BE-4A1D-8B14-677D36F93A7A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2C18FBAF-15BE-4A1D-8B14-677D36F93A7A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{783F32BD-3DA6-463C-BDE3-361D20AF8E4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783F32BD-3DA6-463C-BDE3-361D20AF8E4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783F32BD-3DA6-463C-BDE3-361D20AF8E4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783F32BD-3DA6-463C-BDE3-361D20AF8E4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

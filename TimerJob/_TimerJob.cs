@@ -38,7 +38,7 @@ namespace ListsUpdateUserFieldsTimerJob
         }
         private void ProcessListsByStrategy1(List<SPListToModifyContext> listsToModifyContextes, SPSite site)
         {
-            SPListToModifyContext.SetStrategy(new UpdateUserFieldsByProfileChanges(site.Url));
+            SPListToModifyContext.SetStrategy(new UpdateUserFieldsByProfileChanges(site));
             //TODO: AsParallel().ForAll
             listsToModifyContextes.ForEach(c => c.UpdateListItems());
         }

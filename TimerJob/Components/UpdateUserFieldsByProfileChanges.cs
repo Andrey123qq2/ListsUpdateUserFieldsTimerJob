@@ -9,14 +9,14 @@ using SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    class UpdateUserFieldsByProfileChanges : ISPListModifierStrategy
+    public class UpdateUserFieldsByProfileChanges : ISPListModifierStrategy
     {
         private List<IGrouping<string, UserProfileChange>> _changesGroupedByUsers;
         private SPListToModifyContext _listContext;
-        public UpdateUserFieldsByProfileChanges(string siteUrl)
+        public UpdateUserFieldsByProfileChanges(SPSite site)
         {
             var profilesChangesManager = new ProfilesChangesManager(
-                siteUrl,
+                site,
                 CommonConstants.CHANGE_MANAGER_DAYS_TO_CHECK
             );
             _changesGroupedByUsers = profilesChangesManager.GetAddModifyChangesGroupedByUser();

@@ -10,15 +10,15 @@ using Microsoft.SharePoint;
 
 namespace SPHelpers
 {
-    class ProfilesChangesManager : IDisposable
+    public class ProfilesChangesManager : IDisposable
     {
         private static int _daysToCheck;
         private readonly UserProfileManager _profileManager;
         private readonly SPSite _site;
-        public ProfilesChangesManager(string siteUrl, int daysToCheck)
+        public ProfilesChangesManager(SPSite site, int daysToCheck)
         {
             _daysToCheck = daysToCheck;
-            _site = new SPSite(siteUrl);
+            _site = site;
             SPServiceContext context = SPServiceContext.GetContext(_site);
             _profileManager = new UserProfileManager(context);
         }
