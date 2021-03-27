@@ -38,8 +38,6 @@ namespace ListsUpdateUserFieldsTimerJob
         }
 
         #region ProfileChanges processing methods
-
-
         private Dictionary<string, object> GetFieldsNewValuesMap(IGrouping<string, UserProfileChange> changedProperties)
         {
             Dictionary<string, object> fieldsNewValuesMap = changedProperties.ToList()

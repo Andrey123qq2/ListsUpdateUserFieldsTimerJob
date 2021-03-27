@@ -59,6 +59,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         }
         private void BindDataToUserField()
         {
+            UserFieldDropDownList.DataSource = GetPersonFieldsForUserField();
+            UserFieldDropDownList.DataBind();
+            UserFieldDropDownList.SelectedValue = GetSelectedValueForUserField();
+        }
+        private List<string> GetPersonFieldsForUserField()
+        {
             List<string> personFields = _listFields
                 .Cast<SPField>().ToList()
                 .Where(f => !f.Hidden && f.TypeAsString.Contains("User"))
@@ -66,9 +72,22 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 .ToList();
             personFields.Add(String.Empty);
             personFields.Sort();
-            UserFieldDropDownList.DataSource = personFields;
-            UserFieldDropDownList.DataBind();
-            UserFieldDropDownList.SelectedValue = String.IsNullOrEmpty(_TJListConf.UserField) ? String.Empty : _TJListConf.UserField;
+            return personFields;
+        }
+        private string GetSelectedValueForUserField()
+        {
+            string fieldTitleByListConf = null;
+            try
+            {
+                fieldTitleByListConf = _pageSPList.Fields.GetFieldByInternalName(_TJListConf.UserField).Title;
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format(CommonConstants.ERROR_MESSAGE_TEMPLATE, _pageSPList.ID, "", ex.ToString());
+                SPLogger.WriteLog(SPLogger.Category.Unexpected, "List Config Error", message);
+            }
+            string selectedValueForUserField = String.IsNullOrEmpty(fieldTitleByListConf) ? String.Empty : fieldTitleByListConf;
+            return selectedValueForUserField;
         }
         private void BindDataToEnableCheckBox()
         {
@@ -94,6 +113,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         private void AddColumnsToFieldsDataTable(DataTable fieldsDataTable)
         {
             fieldsDataTable.Columns.Add(new DataColumn("FieldName", typeof(string)));
+            fieldsDataTable.Columns.Add(new DataColumn("FieldInternalName", typeof(string)));
             fieldsDataTable.Columns.Add(new DataColumn("Attribute", typeof(string)));
             fieldsDataTable.Columns.Add(new DataColumn("AttributesList", typeof(Array)));
         }
@@ -111,12 +131,14 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 List<object> dataRow = new List<object> { };
                 // Order should be same as in AddColumnsToDataTable
                 string fieldTitle = field.Title;
-                var tjListConfattributeForField = _TJListConf.AttributesFieldsMap
-                    ?.FirstOrDefault(p => p.Value == fieldTitle)
+                string fieldInternalName = field.InternalName;
+                var attributeForFieldFromConf = _TJListConf.AttributesFieldsMap
+                    ?.FirstOrDefault(p => p.Value == fieldInternalName)
                     .Key;
-                string selectAttributeForField = String.IsNullOrEmpty(tjListConfattributeForField) ? String.Empty : tjListConfattributeForField;
+                string selectAttributeForField = String.IsNullOrEmpty(attributeForFieldFromConf) ? String.Empty : attributeForFieldFromConf;
                 Array optionsAttributesArray = optionsAttributes.Union(new List<string> { selectAttributeForField }).ToArray();
                 dataRow.Add(fieldTitle);
+                dataRow.Add(fieldInternalName);
                 dataRow.Add(selectAttributeForField);
                 dataRow.Add(optionsAttributesArray);
                 fieldsDataTable.Rows.Add(dataRow.ToArray());
@@ -127,7 +149,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         #region SaveData From Page to SPList
         private void GetAdditionalParamsFromPageToERConf()
         {
-            _TJListConf.UserField = UserFieldDropDownList.SelectedValue;
+            string userFieldInternalName = _pageSPList.Fields.GetField(UserFieldDropDownList.SelectedValue).InternalName;
+            _TJListConf.UserField = userFieldInternalName;
             _TJListConf.Enable = EnableCheckBox.Checked;
         }
         private void GetFieldsParamsFromPageToERConf()
@@ -138,11 +161,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             {
                 var fieldTitleCell = row.Cells[0];
                 string fieldName = ((Label)(fieldTitleCell.FindControl("FieldLabel"))).Text;
+                string fieldInternalName = ((Label)(fieldTitleCell.FindControl("FieldLabel"))).Attributes["data-fieldInternalName"].ToString();
                 var attributeCell = row.Cells[1];
                 string attributeForField = ((DropDownList)(attributeCell.FindControl("DropDownList1"))).SelectedValue;
                 if (String.IsNullOrEmpty(attributeForField))
                     continue;
-                attributesFieldsMap.Add(attributeForField, fieldName);
+                attributesFieldsMap.Add(attributeForField, fieldInternalName);
             }
             _TJListConf.AttributesFieldsMap = attributesFieldsMap;
         }

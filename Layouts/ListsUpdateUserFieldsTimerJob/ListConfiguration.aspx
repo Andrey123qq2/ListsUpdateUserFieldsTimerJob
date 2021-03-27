@@ -38,7 +38,7 @@
         <Columns>
             <asp:TemplateField HeaderText="Field" HeaderStyle-Width="250px">
                 <ItemTemplate>
-                    <asp:Label ID="FieldLabel" runat="server" Text='<%# Eval("FieldName") %>'></asp:Label>
+                    <asp:Label ID="FieldLabel" runat="server" Text='<%# Eval("FieldName") %>' data-fieldInternalName='<%# Eval("FieldInternalName") %>'></asp:Label>
                 </ItemTemplate> 
             </asp:TemplateField> 
             <asp:TemplateField HeaderText="Attribute" HeaderStyle-Width="250px">
