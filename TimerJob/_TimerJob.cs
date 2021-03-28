@@ -33,7 +33,7 @@ namespace ListsUpdateUserFieldsTimerJob
         }
         private void ProcessSite(SPSite site)
         {
-            List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site.Url);
+            List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site);
             ProcessListsByStrategy1(listsToModifyContextes, site);
         }
         private void ProcessListsByStrategy1(List<SPListToModifyContext> listsToModifyContextes, SPSite site)

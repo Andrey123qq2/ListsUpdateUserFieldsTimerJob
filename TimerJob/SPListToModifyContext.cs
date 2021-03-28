@@ -1,4 +1,5 @@
-﻿using Microsoft.Office.Server.UserProfiles;
+﻿using ListsUpdateUserFieldsTimerJob.SPHelpers;
+using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 using SPHelpers;
 using SPSCommon.SPJsonConf;
@@ -34,9 +35,9 @@ namespace ListsUpdateUserFieldsTimerJob
             _modifierStrategy.UpdateItems(this);
         }
 
-        public static List<SPListToModifyContext> Factory(string siteUrl)
+        public static List<SPListToModifyContext> Factory(SPSite site)
         {
-            List<SPListToModifyContext> listsToChange = SPListHelpers.GetListsWithJSONConf(siteUrl, CommonConstants.LIST_PROPERTY_JSON_CONF)
+            List<SPListToModifyContext> listsToChange = site.GetListsWithJSONConf(CommonConstants.LIST_PROPERTY_JSON_CONF)
                 .Select(l => new SPListToModifyContext(l, CommonConstants.LIST_PROPERTY_JSON_CONF))
                 .ToList();
             return listsToChange;

@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SPHelpers\SPLogger.cs" />
+    <Compile Include="SPHelpers\SPSiteHelpers.cs" />
     <Compile Include="SPHelpers\SPWebApplicationExtensions.cs" />
     <Compile Include="SPHelpers\PropertyBagConf.cs" />
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx.cs">
