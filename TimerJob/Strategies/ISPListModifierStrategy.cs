@@ -10,6 +10,6 @@ namespace ListsUpdateUserFieldsTimerJob
 {
     public interface ISPListModifierStrategy
     {
-        public void UpdateItems(SPListToModifyContext context);
+        public void Execute(SPListToModifyContext context);
     }
 }

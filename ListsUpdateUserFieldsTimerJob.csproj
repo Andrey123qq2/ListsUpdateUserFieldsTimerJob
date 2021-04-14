@@ -43,6 +43,10 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ERCustom.SPS.ListsUpdatePermissions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=53952d3a5b29f8fe, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ListsUpdatePermissions\bin\Debug\ERCustom.SPS.ListsUpdatePermissions.dll</HintPath>
+    </Reference>
     <Reference Include="LibCustom.SPS.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a9cfd3b5973e55a7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SPCommonLib\bin\Debug\LibCustom.SPS.Common.dll</HintPath>
@@ -79,6 +83,10 @@
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx.designer.cs">
       <DependentUpon>TimerJobSettings.aspx.cs</DependentUpon>
     </Compile>
+    <Compile Include="TimerJob\Strategies\UserItemsAndProfileChanges.cs" />
+    <Compile Include="TimerJob\SPListToModifyContext.cs" />
+    <Compile Include="TimerJob\Strategies\UpdateUserFieldsByProfileChanges.cs" />
+    <Compile Include="TimerJob\Strategies\UpdateItemsPermissions.cs" />
     <Compile Include="TimerJob\TimerJobConfig.cs" />
     <Compile Include="TimerJob\CommonConstants.cs" />
     <Compile Include="TimerJob\ListConfigUpdateUserFields.cs" />
@@ -88,8 +96,7 @@
       <DependentUpon>Feature1.feature</DependentUpon>
     </Compile>
     <Compile Include="SPHelpers\SPFieldHelpers.cs" />
-    <Compile Include="TimerJob\Components\ISPListModifierStrategy.cs" />
-    <Compile Include="TimerJob\ISPListContext.cs" />
+    <Compile Include="TimerJob\Strategies\ISPListModifierStrategy.cs" />
     <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.cs">
       <DependentUpon>ListConfiguration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -98,9 +105,7 @@
       <DependentUpon>ListConfiguration.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="SPHelpers\SPListHelpers.cs" />
-    <Compile Include="TimerJob\SPListToModifyContext.cs" />
-    <Compile Include="TimerJob\Components\UpdateUserFieldsByProfileChanges.cs" />
-    <Compile Include="SPHelpers\ProfilesChangesManager.cs" />
+    <Compile Include="SPHelpers\UserProfileManagerWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimerJob\_TimerJob.cs" />
   </ItemGroup>

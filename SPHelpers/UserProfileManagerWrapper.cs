@@ -8,27 +8,31 @@ using Microsoft.Office.Server.Administration;
 using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 
-namespace SPHelpers
+namespace ListsUpdateUserFieldsTimerJob.SPHelpers
 {
-    public class ProfilesChangesManager : IDisposable
+    public class UserProfileManagerWrapper // : IDisposable
     {
-        private static int _daysToCheck;
+        public List<IGrouping<string, UserProfileChange>> ChangesGroupedByUser {get; }
         private readonly UserProfileManager _profileManager;
         private readonly SPSite _site;
-        public ProfilesChangesManager(SPSite site, int daysToCheck)
+        public UserProfileManagerWrapper(SPSite site, int daysToCheckUserProfilesChanges = 2)
         {
-            _daysToCheck = daysToCheck;
             _site = site;
             SPServiceContext context = SPServiceContext.GetContext(_site);
             _profileManager = new UserProfileManager(context);
+            ChangesGroupedByUser = GetAddModifyChangesGroupedByUser(daysToCheckUserProfilesChanges);
         }
-        public void Dispose()
+        //public void Dispose()
+        //{
+        //    _site.Dispose();
+        //}
+        public UserProfile GetUserProfile(string userLogin)
         {
-            _site.Dispose();
+            return _profileManager.GetUserProfile(userLogin);
         }
-        public UserProfileChangeCollection GetChanges()
+        public UserProfileChangeCollection GetChanges(int daysToCheck)
         {
-            DateTime startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(_daysToCheck));
+            DateTime startDate = DateTime.UtcNow.Subtract(TimeSpan.FromDays(daysToCheck));
             UserProfileChangeToken changeToken = new UserProfileChangeToken(startDate);
             UserProfileChangeQuery changeQuery = new UserProfileChangeQuery(false, true)
             {
@@ -39,9 +43,9 @@ namespace SPHelpers
             UserProfileChangeCollection changes = _profileManager.GetChanges(changeQuery);
             return changes;
         }
-        public List<IGrouping<string, UserProfileChange>> GetAddModifyChangesGroupedByUser()
+        public List<IGrouping<string, UserProfileChange>> GetAddModifyChangesGroupedByUser(int daysToCheck)
         {
-            var groupedByUserChanges = GetChanges().Cast<UserProfileChange>()
+            var groupedByUserChanges = GetChanges(daysToCheck).Cast<UserProfileChange>()
                 .Where(c => {
                     return c.ChangeType == ChangeTypes.Add || c.ChangeType == ChangeTypes.Modify;
                 })

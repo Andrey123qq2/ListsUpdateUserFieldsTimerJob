@@ -3,7 +3,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPHelpers
+namespace ListsUpdateUserFieldsTimerJob.SPHelpers
 {
 	public class DisableItemEvents : SPItemEventReceiver, IDisposable
 	{

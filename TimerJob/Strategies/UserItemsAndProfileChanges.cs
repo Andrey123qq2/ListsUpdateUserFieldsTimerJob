@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    interface ISPListContext
+    public class UserItemsAndProfileChanges
     {
-        SPList CurrentList { get; }
-        ListConfigUpdateUserFields TJListConf { get; }
+        public string UserLogin;
+        public SPListItemCollection ListItems;
+        public List<UserProfileChange> ProfileChanges;
     }
 }

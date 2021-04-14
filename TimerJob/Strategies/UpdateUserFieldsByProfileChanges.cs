@@ -5,42 +5,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SPHelpers;
+using ListsUpdateUserFieldsTimerJob.SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
     public class UpdateUserFieldsByProfileChanges : ISPListModifierStrategy
     {
-        private List<IGrouping<string, UserProfileChange>> _changesGroupedByUsers;
         private SPListToModifyContext _listContext;
-        public UpdateUserFieldsByProfileChanges(SPSite site)
-        {
-            var profilesChangesManager = new ProfilesChangesManager(
-                site,
-                CommonConstants.CHANGE_MANAGER_DAYS_TO_CHECK
-            );
-            _changesGroupedByUsers = profilesChangesManager.GetAddModifyChangesGroupedByUser();
-        }
-        public void UpdateItems(SPListToModifyContext context)
+        public void Execute(SPListToModifyContext context)
         {
             if (context == null || !context.TJListConf.Enable)
                 return;
             _listContext = context;
-            _changesGroupedByUsers.ForEach(g => UpdateUserItemsByChanges(g));
+            _listContext.UsersItemsAndProfileChanges.ForEach(i => UpdateUserItemsByChanges(i));
+            //_changesGroupedByUsers.ForEach(g => UpdateUserItemsByChanges(g));
         }
 
-        private void UpdateUserItemsByChanges(IGrouping<string, UserProfileChange> changedProperties)
+        private void UpdateUserItemsByChanges(UserItemsAndProfileChanges item)
         {
-            string userLogin = changedProperties.Key;
-            SPListItemCollection userItems = GetUserItems(userLogin);
-            Dictionary<string, object> changedAttributes = GetFieldsNewValuesMap(changedProperties);
-            UpdateUserItems(userItems, changedAttributes);
+            Dictionary<string, object> changedAttributes = GetFieldsNewValuesMap(item.ProfileChanges);
+            UpdateUserItems(item.ListItems, changedAttributes);
         }
 
         #region ProfileChanges processing methods
-        private Dictionary<string, object> GetFieldsNewValuesMap(IGrouping<string, UserProfileChange> changedProperties)
+        //private Dictionary<string, object> GetFieldsNewValuesMap(IGrouping<string, UserProfileChange> changedProperties)
+        private Dictionary<string, object> GetFieldsNewValuesMap(List<UserProfileChange> changedProperties)
         {
-            Dictionary<string, object> fieldsNewValuesMap = changedProperties.ToList()
+            Dictionary<string, object> fieldsNewValuesMap = changedProperties
                 .Where(c => _listContext.TJListConf.AttributesFieldsMap.ContainsKey(((UserProfileSingleValueChange)c).ProfileProperty.Name))
                 .OrderByDescending(c => c.EventTime)
                 .GroupBy(c => ((UserProfileSingleValueChange)c).ProfileProperty.Name)
@@ -101,15 +92,6 @@ namespace ListsUpdateUserFieldsTimerJob
                     i.SystemUpdate();
                 }
             });
-        }
-
-        private SPListItemCollection GetUserItems(string userLogin)
-        {
-            string fieldName = _listContext.TJListConf.UserField;
-            string fieldInternalName = _listContext.CurrentList.Fields.GetField(fieldName).InternalName;
-            SPUser spUser = _listContext.CurrentList.ParentWeb.EnsureUser(userLogin);
-            SPListItemCollection items = _listContext.CurrentList.QueryItems(fieldInternalName, spUser.ID.ToString(), CAMLQueryType.User);
-            return items;
         }
         #endregion
     }

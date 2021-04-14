@@ -8,8 +8,7 @@ using System.Web;
 using System.Web.UI.WebControls;
 using System.Linq;
 using System.Configuration;
-using SPWebPartsCommon;
-using SPHelpers;
+using ListsUpdateUserFieldsTimerJob.SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 {

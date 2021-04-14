@@ -1,6 +1,6 @@
 ﻿using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
-using SPHelpers;
+using ListsUpdateUserFieldsTimerJob.SPHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,13 +34,19 @@ namespace ListsUpdateUserFieldsTimerJob
         private void ProcessSite(SPSite site)
         {
             List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site);
-            ProcessListsByStrategy1(listsToModifyContextes, site);
+            ProcessListsByStrategies(listsToModifyContextes);
         }
-        private void ProcessListsByStrategy1(List<SPListToModifyContext> listsToModifyContextes, SPSite site)
+        private void ProcessListsByStrategies(List<SPListToModifyContext> listsContextes)
         {
-            SPListToModifyContext.SetStrategy(new UpdateUserFieldsByProfileChanges(site));
+            UpdateUserFieldsByProfileChanges strategy1 = new UpdateUserFieldsByProfileChanges();
+            UpdateItemsPermissions strategy2 = new UpdateItemsPermissions();
             //TODO: AsParallel().ForAll
-            listsToModifyContextes.ForEach(c => c.UpdateListItems());
+            listsContextes.ForEach(c => {
+                c.SetStrategy(strategy1);
+                c.ExecuteStrategy();
+                c.SetStrategy(strategy2);
+                c.ExecuteStrategy();
+            });
         }
     }
 }

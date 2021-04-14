@@ -2,7 +2,7 @@
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
 using Microsoft.SharePoint.WebControls;
-using SPHelpers;
+using ListsUpdateUserFieldsTimerJob.SPHelpers;
 using System;
 using System.Collections.Generic;
 using System.Data;

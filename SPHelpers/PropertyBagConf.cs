@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPHelpers
+namespace ListsUpdateUserFieldsTimerJob.SPHelpers
 {
     public class PropertyBagConfHelper<T>
     {

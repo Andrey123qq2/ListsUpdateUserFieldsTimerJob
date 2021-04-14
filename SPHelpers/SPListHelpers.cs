@@ -5,14 +5,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPHelpers
+namespace ListsUpdateUserFieldsTimerJob.SPHelpers
 {
-    static class SPListHelpers
+    public static class SPListHelpers
     {
         private static readonly Dictionary<CAMLQueryType, string> _camlQueryTemplateToTypesMap = new Dictionary<CAMLQueryType, string> {
             { CAMLQueryType.User, @"<Where><Eq><FieldRef Name='{0}' LookupId='True' /><Value Type = 'User'>{1}</Value></Eq></Where>" },
             { CAMLQueryType.Text, @"<Where><Eq><FieldRef Name='{0}'/><Value Type = 'Text'>{1}</Value></Eq></Where>"}
         };
+        public static SPList GetSPList(string listUrl)
+        {
+            SPSite site = new SPSite(listUrl);
+            SPWeb web = site.OpenWeb();
+            SPList list = web.GetList(listUrl);
+
+            return list;
+        }
         public static SPList GetSPList(string webUrl, Guid listGUID)
         {
             SPList list;
