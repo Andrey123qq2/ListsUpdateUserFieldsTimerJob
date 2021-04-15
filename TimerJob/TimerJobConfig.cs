@@ -9,5 +9,8 @@ namespace ListsUpdateUserFieldsTimerJob
     class TimerJobConfig
     {
         public List<string> AttributesOptInLists = new List<string>();
+        public string SPReportWebUrl;
+        public string SPReportLibraryName;
+        public string SPReportFilePathTemplate;
     }
 }

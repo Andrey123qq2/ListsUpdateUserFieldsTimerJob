@@ -12,6 +12,26 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
+    <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;margin-top:20px;" >
+        <asp:TableRow ID="TableRow1" runat="server" BackColor="White" >
+            <asp:TableCell>SPReport WebUrl (site relative)</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="SPReportWebUrl" runat="server" Width="300px"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow2" runat="server" BackColor="White" >
+            <asp:TableCell>SPReport LibraryName</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="SPReportLibraryName" runat="server" Width="300px"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow3" runat="server" BackColor="White" >
+            <asp:TableCell>SPReport FilePathTemplate</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="SPReportFilePathTemplate" runat="server" Width="300px"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>
+    </asp:Table>
     <SharePoint:SPGridView ID="AttributesTable" runat="server" AutoGenerateColumns="false" style="margin-top:20px;">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
         <AlternatingRowStyle BackColor="White" ForeColor="#000" Height="30px" HorizontalAlign="Left" />

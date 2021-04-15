@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob.SPHelpers
 {
-    static class SPSiteHelpers
+    static class SPSiteExtensions
     {
         public static List<SPList> GetListsWithJSONConf(this SPSite site, string confFilter)
         {

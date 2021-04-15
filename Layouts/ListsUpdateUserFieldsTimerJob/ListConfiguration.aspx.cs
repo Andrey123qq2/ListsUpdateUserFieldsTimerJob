@@ -43,7 +43,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         {
             var tjConf = PropertyBagConfHelper<TimerJobConfig>.Get(
                 _pageSPList.ParentWeb.Site.RootWeb.AllProperties, 
-                CommonConstants.LIST_PROPERTY_JSON_CONF
+                CommonConstants.TJOB_PROPERTY_JSON_CONF
             );
             List<string> profilesAttributes = tjConf.AttributesOptInLists;
             return profilesAttributes;

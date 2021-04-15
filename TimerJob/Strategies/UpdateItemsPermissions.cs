@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ListsUpdateUserFieldsTimerJob
+namespace ListsUpdateUserFieldsTimerJob.Strategies
 {
     class UpdateItemsPermissions : ISPListModifierStrategy
     {

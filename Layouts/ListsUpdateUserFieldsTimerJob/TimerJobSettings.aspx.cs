@@ -22,13 +22,13 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             if (IsPostBack)
                 return;
             BindDataToAttributesTable();
+            BindDataToAdditionalTable();
         }
 
         private void InitParams()
         {
             _currentSite = SPContext.Current.Site;
-            _TJConf = PropertyBagConfHelper<TimerJobConfig>.Get(_currentSite.RootWeb.AllProperties, CommonConstants.LIST_PROPERTY_JSON_CONF);
-            
+            _TJConf = PropertyBagConfHelper<TimerJobConfig>.Get(_currentSite.RootWeb.AllProperties, CommonConstants.TJOB_PROPERTY_JSON_CONF);
             _profilesAttributes = GetProfilesAttributes();
         }
         private List<string> GetProfilesAttributes()
@@ -45,6 +45,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         }
 
         #region BindData to Page
+        private void BindDataToAdditionalTable()
+        {
+            SPReportWebUrl.Text = _TJConf.SPReportWebUrl;
+            SPReportFilePathTemplate.Text = _TJConf.SPReportFilePathTemplate;
+            SPReportLibraryName.Text = _TJConf.SPReportLibraryName;
+        }
         private void BindDataToAttributesTable()
         {
             AttributesTable.DataSource = GetDataForAttributesTable();
@@ -84,6 +90,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         #endregion
 
         #region SaveData From Page to PropertyBag
+        private void GetAdditionalParamsFromPageToERConf()
+        {
+            _TJConf.SPReportWebUrl = SPReportWebUrl.Text;
+            _TJConf.SPReportFilePathTemplate = SPReportFilePathTemplate.Text;
+            _TJConf.SPReportLibraryName = SPReportLibraryName.Text;
+        }
         private void GetAttributesParamsFromPageToTJConf()
         {
             var attributesTableRows = AttributesTable.Rows;
@@ -102,13 +114,14 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 
         private void SaveTJConfToPropertyBag()
         {
-            PropertyBagConfHelper<TimerJobConfig>.Set(_currentSite.RootWeb.AllProperties, CommonConstants.LIST_PROPERTY_JSON_CONF, _TJConf);
+            PropertyBagConfHelper<TimerJobConfig>.Set(_currentSite.RootWeb.AllProperties, CommonConstants.TJOB_PROPERTY_JSON_CONF, _TJConf);
             _currentSite.RootWeb.Update();
         }
         #endregion
         protected void ButtonOK_EventHandler(object sender, EventArgs e)
         {
             GetAttributesParamsFromPageToTJConf();
+            GetAdditionalParamsFromPageToERConf();
             SaveTJConfToPropertyBag();
             RedirectToPreviousPageBySource();
         }

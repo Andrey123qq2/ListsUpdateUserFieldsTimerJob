@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ListsUpdateUserFieldsTimerJob.Strategies;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
@@ -33,20 +34,28 @@ namespace ListsUpdateUserFieldsTimerJob
         }
         private void ProcessSite(SPSite site)
         {
+            var siteTJConf = PropertyBagConfHelper<TimerJobConfig>.Get(
+                site.RootWeb.AllProperties,
+                CommonConstants.LIST_PROPERTY_JSON_CONF
+            );
             List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site);
-            ProcessListsByStrategies(listsToModifyContextes);
+            ProcessListsByStrategies(listsToModifyContextes, siteTJConf);
         }
-        private void ProcessListsByStrategies(List<SPListToModifyContext> listsContextes)
+        private void ProcessListsByStrategies(List<SPListToModifyContext> listsContextes, TimerJobConfig tjConf)
         {
             UpdateUserFieldsByProfileChanges strategy1 = new UpdateUserFieldsByProfileChanges();
             UpdateItemsPermissions strategy2 = new UpdateItemsPermissions();
+            TimerJobReport strategy3 = new TimerJobReport(tjConf.SPReportWebUrl, tjConf.SPReportLibraryName, tjConf.SPReportFilePathTemplate);
             //TODO: AsParallel().ForAll
             listsContextes.ForEach(c => {
                 c.SetStrategy(strategy1);
                 c.ExecuteStrategy();
                 c.SetStrategy(strategy2);
                 c.ExecuteStrategy();
+                c.SetStrategy(strategy3);
+                c.ExecuteStrategy();
             });
+            strategy3.SaveReport();
         }
     }
 }

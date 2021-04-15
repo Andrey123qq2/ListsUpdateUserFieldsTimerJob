@@ -1,6 +1,7 @@
 ﻿using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,16 @@ namespace ListsUpdateUserFieldsTimerJob.SPHelpers
             { CAMLQueryType.User, @"<Where><Eq><FieldRef Name='{0}' LookupId='True' /><Value Type = 'User'>{1}</Value></Eq></Where>" },
             { CAMLQueryType.Text, @"<Where><Eq><FieldRef Name='{0}'/><Value Type = 'Text'>{1}</Value></Eq></Where>"}
         };
+        public static void SaveFileToSPLib(SPWeb web, string libraryName, string fileFullPath)
+        {
+            bool replaceExistingFiles = true;
+            if (!System.IO.File.Exists(fileFullPath))
+                throw new FileNotFoundException("File not found.", fileFullPath);
+            SPFolder reportLibrary = web.GetFolder(libraryName);
+            string fileName = System.IO.Path.GetFileName(fileFullPath);
+            FileStream fileStream = File.OpenRead(fileFullPath);
+            reportLibrary.Files.Add(fileName, fileStream, replaceExistingFiles);
+        }
         public static SPList GetSPList(string listUrl)
         {
             SPSite site = new SPSite(listUrl);

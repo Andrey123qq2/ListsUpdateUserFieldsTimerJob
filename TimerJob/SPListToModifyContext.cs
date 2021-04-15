@@ -1,4 +1,5 @@
 ﻿using ListsUpdateUserFieldsTimerJob.SPHelpers;
+using ListsUpdateUserFieldsTimerJob.Strategies;
 using Microsoft.Office.Server.UserProfiles;
 using Microsoft.SharePoint;
 using System;
@@ -23,12 +24,16 @@ namespace ListsUpdateUserFieldsTimerJob
             TJListConf = PropertyBagConfHelper<ListConfigUpdateUserFields>.Get(list.RootFolder.Properties, confPopertyName);
             ProfilesChangesManager = profilesChangesManager;
             UsersItemsAndProfileChanges = ProfilesChangesManager.ChangesGroupedByUser
-                .Select(g => 
-                    new UserItemsAndProfileChanges
-                    { 
-                        UserLogin = g.Key, 
-                        ListItems = GetUserItems(g.Key), 
-                        ProfileChanges = g.ToList() 
+                .Select(g =>
+                    {
+                        var profileChanges = g.ToList();
+                        return new UserItemsAndProfileChanges
+                        {
+                            UserLogin = g.Key,
+                            ListItems = GetUserItems(g.Key),
+                            ProfileChanges = profileChanges,
+                            FieldsNewValues = GetFieldsNewValuesMap(profileChanges)
+                        };
                     }
                 )
                 .ToList();
@@ -53,6 +58,45 @@ namespace ListsUpdateUserFieldsTimerJob
             SPListItemCollection items = CurrentList.QueryItems(fieldInternalName, spUser.ID.ToString(), CAMLQueryType.User);
             return items;
         }
+
+        #region ProfileChanges processing methods
+        private Dictionary<string, object> GetFieldsNewValuesMap(List<UserProfileChange> changedProperties)
+        {
+            Dictionary<string, object> fieldsNewValuesMap = changedProperties
+                .Where(c => TJListConf.AttributesFieldsMap.ContainsKey(((UserProfileSingleValueChange)c).ProfileProperty.Name))
+                .OrderByDescending(c => c.EventTime)
+                .GroupBy(c => ((UserProfileSingleValueChange)c).ProfileProperty.Name)
+                .Select(g => g.First())
+                .ToDictionary(
+                    c => TJListConf.AttributesFieldsMap[((UserProfileSingleValueChange)c).ProfileProperty.Name],
+                    c => GetFieldValueFromProfileChange(c)
+                );
+            return fieldsNewValuesMap;
+        }
+
+        private object GetFieldValueFromProfileChange(UserProfileChange profileChange)
+        {
+            object fieldNewValue;
+            string changedPropertyName = ((UserProfileSingleValueChange)profileChange).ProfileProperty.Name;
+            string listFieldName = TJListConf.AttributesFieldsMap[changedPropertyName];
+            SPField listField = CurrentList.Fields.GetField(listFieldName);
+            string listFieldTypeName = listField.TypeAsString;
+            var profileNewValue = ((UserProfileSingleValueChange)profileChange).NewValue;
+            if (listFieldTypeName.Contains("User"))
+            {
+                fieldNewValue = CurrentList.ParentWeb.EnsureUser((string)profileNewValue);
+            }
+            else if (listFieldTypeName.Contains("Lookup"))
+            {
+                fieldNewValue = SPFieldHelpers.GetSPFieldLookupValueFromText(listField, (string)profileNewValue);
+            }
+            else
+            {
+                fieldNewValue = profileNewValue;
+            }
+            return fieldNewValue;
+        }
+        #endregion
 
         public static List<SPListToModifyContext> Factory(SPSite site)
         {
