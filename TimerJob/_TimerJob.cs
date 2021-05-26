@@ -36,7 +36,7 @@ namespace ListsUpdateUserFieldsTimerJob
         {
             var siteTJConf = PropertyBagConfHelper<TimerJobConfig>.Get(
                 site.RootWeb.AllProperties,
-                CommonConstants.LIST_PROPERTY_JSON_CONF
+                CommonConstants.TJOB_PROPERTY_JSON_CONF
             );
             List<SPListToModifyContext> listsToModifyContextes = SPListToModifyContext.Factory(site);
             ProcessListsByStrategies(listsToModifyContextes, siteTJConf);
