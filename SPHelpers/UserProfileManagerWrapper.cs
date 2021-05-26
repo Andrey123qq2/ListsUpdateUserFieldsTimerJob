@@ -22,10 +22,6 @@ namespace ListsUpdateUserFieldsTimerJob.SPHelpers
             _profileManager = new UserProfileManager(context);
             ChangesGroupedByUser = GetAddModifyChangesGroupedByUser(daysToCheckUserProfilesChanges);
         }
-        //public void Dispose()
-        //{
-        //    _site.Dispose();
-        //}
         public UserProfile GetUserProfile(string userLogin)
         {
             return _profileManager.GetUserProfile(userLogin);
