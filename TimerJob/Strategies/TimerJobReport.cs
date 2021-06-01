@@ -13,9 +13,9 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
     class TimerJobReport : ISPListModifierStrategy
     {
         private SPListToModifyContext _listContext;
-        private string _reportWebUrl;
-        private string _reportLibraryName;
-        private string _reportFileFullPath;
+        private readonly string _reportWebUrl;
+        private readonly string _reportLibraryName;
+        private readonly string _reportFileFullPath;
         private string _listContextUserField;
         private DataTable _CSVReportTable = new DataTable();
         public TimerJobReport(string webUrl, string libraryName, string filePathTemplate)

@@ -69,6 +69,42 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         protected global::System.Web.UI.WebControls.TableRow TableRow3;
 
         /// <summary>
+        /// AdditionalCamlQuery control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox AdditionalCamlQuery;
+
+        /// <summary>
+        /// TableRow4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow TableRow4;
+
+        /// <summary>
+        /// FilterCreatedLastDays control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox FilterCreatedLastDays;
+
+        /// <summary>
+        /// TableRow5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow TableRow5;
+
+        /// <summary>
         /// TimerJobSettings control.
         /// </summary>
         /// <remarks>

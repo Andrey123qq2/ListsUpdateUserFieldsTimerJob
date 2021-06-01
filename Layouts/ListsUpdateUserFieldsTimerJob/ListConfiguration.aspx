@@ -25,6 +25,18 @@
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow ID="TableRow3" runat="server" BackColor="White" >
+            <asp:TableCell>Additional CamlQuery</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="AdditionalCamlQuery" runat="server" Width="300" TextMode="MultiLine" Height="150"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow4" runat="server" BackColor="White" >
+            <asp:TableCell>Force update items created last days</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="FilterCreatedLastDays" runat="server" type="number"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow5" runat="server" BackColor="White" >
             <asp:TableCell>TimerJob Settings</asp:TableCell>
             <asp:TableCell>
                 <asp:HyperLink ID="TimerJobSettings" runat="server"></asp:HyperLink>

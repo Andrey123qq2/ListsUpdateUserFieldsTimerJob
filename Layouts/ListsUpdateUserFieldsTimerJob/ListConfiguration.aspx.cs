@@ -27,7 +27,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             BindDataToAdditionalTable();
             BindDataToFieldsTable();
         }
-       
+
         private void InitParams()
         {
             Guid listGuid = new Guid(Request.QueryString["List"]);
@@ -35,14 +35,14 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             _listFields = _pageSPList.Fields;
             _profilesAttributes = GetProfilesAttributes();
             _TJListConf = PropertyBagConfHelper<ListConfigUpdateUserFields>.Get(
-                _pageSPList.RootFolder.Properties, 
+                _pageSPList.RootFolder.Properties,
                 CommonConstants.LIST_PROPERTY_JSON_CONF
             );
         }
         private List<string> GetProfilesAttributes()
         {
             var tjConf = PropertyBagConfHelper<TimerJobConfig>.Get(
-                _pageSPList.ParentWeb.Site.RootWeb.AllProperties, 
+                _pageSPList.ParentWeb.Site.RootWeb.AllProperties,
                 CommonConstants.TJOB_PROPERTY_JSON_CONF
             );
             List<string> profilesAttributes = tjConf.AttributesOptInLists;
@@ -55,12 +55,38 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             BindDataToUserField();
             BindDataToEnableCheckBox();
             BindDataToTimerJobUrl();
+            BindDataToFilterCreatedLastDays();
+            BindDataToAdditionalCamlQuery();
         }
+
+        private void BindDataToAdditionalCamlQuery() {
+            AdditionalCamlQuery.Text = _TJListConf.AdditionalCamlQuery;
+        }
+        private void BindDataToFilterCreatedLastDays()
+        {
+            FilterCreatedLastDays.Text = _TJListConf.FilterCreatedLastDays.ToString();
+        }
+        private string GetFieldDisplayName(string fieldInternalName)
+        {
+            string fieldTitleByListConf = null;
+            try
+            {
+                fieldTitleByListConf = _pageSPList.Fields.GetFieldByInternalName(fieldInternalName).Title;
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format(CommonConstants.ERROR_MESSAGE_TEMPLATE, _pageSPList.ID, "", ex.ToString());
+                SPLogger.WriteLog(SPLogger.Category.Unexpected, "List Config Error", message);
+            }
+            string fieldDisplayName = String.IsNullOrEmpty(fieldTitleByListConf) ? String.Empty : fieldTitleByListConf;
+            return fieldDisplayName;
+        }
+
         private void BindDataToUserField()
         {
             UserFieldDropDownList.DataSource = GetPersonFieldsForUserField();
             UserFieldDropDownList.DataBind();
-            UserFieldDropDownList.SelectedValue = GetSelectedValueForUserField();
+            UserFieldDropDownList.SelectedValue = GetFieldDisplayName(_TJListConf.UserField);
         }
         private List<string> GetPersonFieldsForUserField()
         {
@@ -72,21 +98,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             personFields.Add(String.Empty);
             personFields.Sort();
             return personFields;
-        }
-        private string GetSelectedValueForUserField()
-        {
-            string fieldTitleByListConf = null;
-            try
-            {
-                fieldTitleByListConf = _pageSPList.Fields.GetFieldByInternalName(_TJListConf.UserField).Title;
-            }
-            catch (Exception ex)
-            {
-                var message = String.Format(CommonConstants.ERROR_MESSAGE_TEMPLATE, _pageSPList.ID, "", ex.ToString());
-                SPLogger.WriteLog(SPLogger.Category.Unexpected, "List Config Error", message);
-            }
-            string selectedValueForUserField = String.IsNullOrEmpty(fieldTitleByListConf) ? String.Empty : fieldTitleByListConf;
-            return selectedValueForUserField;
         }
         private void BindDataToEnableCheckBox()
         {
@@ -151,6 +162,8 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             string userFieldInternalName = _pageSPList.Fields.GetField(UserFieldDropDownList.SelectedValue).InternalName;
             _TJListConf.UserField = userFieldInternalName;
             _TJListConf.Enable = EnableCheckBox.Checked;
+            _TJListConf.FilterCreatedLastDays = int.Parse(FilterCreatedLastDays.Text);
+            _TJListConf.AdditionalCamlQuery = AdditionalCamlQuery.Text;
         }
         private void GetFieldsParamsFromPageToERConf()
         {
