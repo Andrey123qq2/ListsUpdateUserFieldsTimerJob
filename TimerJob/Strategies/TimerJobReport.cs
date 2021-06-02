@@ -86,7 +86,7 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
                     String.Format(
                         stringsFormat,
                         p.Key,
-                        p.Value.ToString()
+                        p.Value?.ToString()
                     )
                 )
                 .ToArray();
