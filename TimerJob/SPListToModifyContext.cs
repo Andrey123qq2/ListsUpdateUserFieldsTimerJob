@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob
 {
-    public class SPListToModifyContext // : ISPListContext
+    public class SPListToModifyContext
     {
         public SPList CurrentList { get; }
         public ListConfigUpdateUserFields TJListConf { get; }
-        public List<UserItemsAndProfileChanges> UsersItemsAndProfileChanges;
+        public List<UserItemsAndNewFieldsValues> UsersItemsAndProfileChanges;
 
         public UserProfileManagerWrapper ProfilesChangesManager;
         private ISPListModifierStrategy _modifierStrategy;

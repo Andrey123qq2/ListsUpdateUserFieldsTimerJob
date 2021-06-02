@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace ListsUpdateUserFieldsTimerJob.Strategies
 {
-    public class UserItemsAndProfileChanges
+    public class UserItemsAndNewFieldsValues
     {
         public string UserLogin;
-        public SPListItemCollection ListItems;
+        public List<SPListItem> ListItems;
         public List<UserProfileChange> ProfileChanges;
         public Dictionary<string, object> FieldsNewValues;
     }

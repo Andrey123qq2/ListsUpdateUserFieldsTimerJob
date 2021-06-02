@@ -63,7 +63,7 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
             _listContext.UsersItemsAndProfileChanges
                 .ForEach(i => AddItemRowToCSVReportTable(i));
         }
-        private void AddItemRowToCSVReportTable(UserItemsAndProfileChanges item)
+        private void AddItemRowToCSVReportTable(UserItemsAndNewFieldsValues item)
         {
             string userLogin = item.UserLogin;
             string itemUrlBase = _listContext.CurrentList.ParentWeb.Site.Url + _listContext.CurrentList.DefaultDisplayFormUrl + "?ID=";

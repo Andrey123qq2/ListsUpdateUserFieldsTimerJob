@@ -15,14 +15,14 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         private readonly string _camlQueryTemplateForUserField = @"<Eq><FieldRef Name='{0}' LookupId='True' /><Value Type = 'User'>{1}</Value></Eq>";
         public void Execute(SPListToModifyContext context)
         {
-            if (context == null || !context.TJListConf.Enable)
+            if (context == null || !context.TJListConf.Enable || context.TJListConf.FilterCreatedLastDays > 0)
                 return;
             _listContext = context;
             _listContext.UsersItemsAndProfileChanges = GetUsersItemsAndProfileChanges();
             _listContext.UsersItemsAndProfileChanges.ForEach(i => UpdateUserItemsByChanges(i));
         }
 
-        private void UpdateUserItemsByChanges(UserItemsAndProfileChanges item)
+        private void UpdateUserItemsByChanges(UserItemsAndNewFieldsValues item)
         {
             item.ListItems
                 .Cast<SPListItem>()
@@ -30,13 +30,13 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
                 .ForEach(i => i.UpdateByNewValues(item.FieldsNewValues));
         }
 
-        private List<UserItemsAndProfileChanges> GetUsersItemsAndProfileChanges() 
+        private List<UserItemsAndNewFieldsValues> GetUsersItemsAndProfileChanges() 
         {
             var usersItemsAndProfileChanges = _listContext.ProfilesChangesManager.ChangesGroupedByUser
                     .Select(g =>
                     {
                         var profileChanges = g.ToList();
-                        return new UserItemsAndProfileChanges
+                        return new UserItemsAndNewFieldsValues
                         {
                             UserLogin = g.Key,
                             ListItems = GetUserItems(g.Key),
@@ -48,11 +48,11 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
                     .ToList();
             return usersItemsAndProfileChanges;
         }
-        private SPListItemCollection GetUserItems(string userLogin)
+        private List<SPListItem> GetUserItems(string userLogin)
         {
             string camlQueryString = GetCamlQueryFilterString(userLogin);
             SPListItemCollection items = _listContext.CurrentList.QueryItems(camlQueryString);
-            return items;
+            return items.Cast<SPListItem>().ToList();
         }
         private string GetCamlQueryFilterString(string userLogin)
         {
