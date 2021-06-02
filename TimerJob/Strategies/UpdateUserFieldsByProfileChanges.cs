@@ -34,17 +34,18 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         {
             var usersItemsAndProfileChanges = _listContext.ProfilesChangesManager.ChangesGroupedByUser
                     .Select(g =>
-                    {
-                        var profileChanges = g.ToList();
-                        return new UserItemsAndNewFieldsValues
                         {
-                            UserLogin = g.Key,
-                            ListItems = GetUserItems(g.Key),
-                            ProfileChanges = profileChanges,
-                            FieldsNewValues = GetFieldsNewValuesMap(profileChanges)
-                        };
-                    }
+                            var profileChanges = g.ToList();
+                            return new UserItemsAndNewFieldsValues
+                            {
+                                UserLogin = g.Key,
+                                ListItems = GetUserItems(g.Key),
+                                ProfileChanges = profileChanges,
+                                FieldsNewValues = GetFieldsNewValuesMap(profileChanges)
+                            };
+                        }
                     )
+                    .Where(i => i.FieldsNewValues.Count > 0)
                     .ToList();
             return usersItemsAndProfileChanges;
         }
