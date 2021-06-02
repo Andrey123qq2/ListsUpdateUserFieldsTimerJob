@@ -44,8 +44,9 @@ namespace ListsUpdateUserFieldsTimerJob
         private void ProcessListsByStrategies(List<SPListToModifyContext> listsContextes, TimerJobConfig tjConf)
         {
             UpdateUserFieldsByProfileChanges strategy1 = new UpdateUserFieldsByProfileChanges();
-            UpdateItemsPermissions strategy2 = new UpdateItemsPermissions();
-            TimerJobReport strategy3 = new TimerJobReport(tjConf.SPReportWebUrl, tjConf.SPReportLibraryName, tjConf.SPReportFilePathTemplate);
+            UpdateUserFieldsForce strategy2 = new UpdateUserFieldsForce();
+            UpdateItemsPermissions strategy3 = new UpdateItemsPermissions();
+            TimerJobReport strategy4 = new TimerJobReport(tjConf.SPReportWebUrl, tjConf.SPReportLibraryName, tjConf.SPReportFilePathTemplate);
             //TODO: AsParallel().ForAll
             listsContextes.ForEach(c => {
                 c.SetStrategy(strategy1);
@@ -54,8 +55,10 @@ namespace ListsUpdateUserFieldsTimerJob
                 c.ExecuteStrategy();
                 c.SetStrategy(strategy3);
                 c.ExecuteStrategy();
+                c.SetStrategy(strategy4);
+                c.ExecuteStrategy();
             });
-            strategy3.SaveReport();
+            strategy4.SaveReport();
         }
     }
 }
