@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -14,16 +13,18 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
     public class UpdateUserFieldsForce : ISPListModifierStrategy
     {
         private SPListToModifyContext _listContext;
-        private readonly string _camlQueryTemplate = @"<Where><Geq><FieldRef Name = Created/> <Value Type = 'DateTime'><Today OffsetDays={0}/></Value></Geq></Where>";
         public void Execute(SPListToModifyContext context)
         {
-            if (context == null || !context.TJListConf.Enable || context.TJListConf.FilterCreatedLastDays == 0)
+            if (context == null || !context.TJListConf.Enable || !context.TJListConf.ForceUpdate)
                 return;
             _listContext = context;
+            if (_listContext.TJListConf.DisableForceUpdatePermissions)
+                _listContext.DisableUpdatePermissions = true;
             var itemsForUpdate = GetListItemsForUpdate();
             var itemsForUpdateGroupedByUsers = GetListItemsGroupedByUsers(itemsForUpdate);
             _listContext.UsersItemsAndProfileChanges = GetUsersItemsAndProfileAttributes(itemsForUpdateGroupedByUsers);
             _listContext.UsersItemsAndProfileChanges.ForEach(i => UpdateItemByNewValues(i));
+            ChangeForceUpdateInListConf();
         }
         private void UpdateItemByNewValues(UserItemsAndNewFieldsValues item)
         {
@@ -34,20 +35,24 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         }
         private SPListItemCollection GetListItemsForUpdate()
         {
-            string camlQueryString = String.Format(_camlQueryTemplate, -1 * _listContext.TJListConf.FilterCreatedLastDays);
-            SPListItemCollection items = _listContext.CurrentList.QueryItems(camlQueryString);
+            SPListItemCollection items;
+            if (String.IsNullOrEmpty(_listContext.TJListConf.ForceUpdateCamlQuery))
+                items = _listContext.CurrentList.Items;
+            else
+                items = _listContext.CurrentList.QueryItems("<Where>" + _listContext.TJListConf.ForceUpdateCamlQuery + "</Where>");
             return items;
         }
         private List<IGrouping<string, SPListItem>> GetListItemsGroupedByUsers(SPListItemCollection items)
         {
             var itemsGroupedByUsers = items
                 .Cast<SPListItem>()
+                .Where(i => i[_listContext.TJListConf.UserField] != null)
                 .GroupBy(i =>
-                    {
-                        string userFieldValueString = i[_listContext.TJListConf.UserField].ToString();
-                        SPFieldUserValue userFieldValue = new SPFieldUserValue(_listContext.CurrentList.ParentWeb, userFieldValueString);
-                        return userFieldValue.User.LoginName;
-                    }
+                {
+                    string userFieldValueString = i[_listContext.TJListConf.UserField].ToString();
+                    SPFieldUserValue userFieldValue = new SPFieldUserValue(_listContext.CurrentList.ParentWeb, userFieldValueString);
+                    return userFieldValue.User.LoginName;
+                }
                 )
                 .ToList();
             return itemsGroupedByUsers;
@@ -56,15 +61,15 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         {
             var usersItemsAndProfileAttributes = listItemsGroupedByUsers
                 .Select(g =>
+                {
+                    string userLogin = g.Key;
+                    return new UserItemsAndNewFieldsValues
                     {
-                        string userLogin = g.Key;
-                        return new UserItemsAndNewFieldsValues
-                        {
-                            UserLogin = userLogin,
-                            ListItems = g.ToList(),
-                            FieldsNewValues = GetFieldsNewValuesMapFromUserProfile(userLogin)
-                        };
-                    }
+                        UserLogin = userLogin,
+                        ListItems = g.ToList(),
+                        FieldsNewValues = GetFieldsNewValuesMapFromUserProfile(userLogin)
+                    };
+                }
                 )
                 .ToList();
             return usersItemsAndProfileAttributes;
@@ -86,12 +91,29 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
             SPField listField = _listContext.CurrentList.Fields.GetField(listFieldName);
             string listFieldTypeName = listField.TypeAsString;
             if (listFieldTypeName.Contains("User"))
-                fieldNewValue = _listContext.CurrentList.ParentWeb.EnsureUser((string)profileValue);
+            {
+                if (profileValue == null)
+                    fieldNewValue = new SPFieldUserValue();
+                else
+                    fieldNewValue = _listContext.CurrentList.ParentWeb.EnsureUser((string)profileValue);
+            }
             else if (listFieldTypeName.Contains("Lookup"))
                 fieldNewValue = SPFieldHelpers.GetSPFieldLookupValueFromText(listField, (string)profileValue);
             else
                 fieldNewValue = profileValue;
             return fieldNewValue;
+        }
+        private void ChangeForceUpdateInListConf()
+        {
+            if (!_listContext.TJListConf.DisableForceUpdateAfterRun)
+                return;
+            _listContext.TJListConf.ForceUpdate = false;
+            PropertyBagConfHelper<ListConfigUpdateUserFields>.Set(
+                _listContext.CurrentList.RootFolder.Properties, 
+                CommonConstants.LIST_PROPERTY_JSON_CONF,
+                _listContext.TJListConf
+            );
+            _listContext.CurrentList.Update();
         }
     }
 }

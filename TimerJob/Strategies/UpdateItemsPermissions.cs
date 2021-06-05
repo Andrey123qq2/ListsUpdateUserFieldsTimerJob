@@ -1,5 +1,6 @@
 ﻿using ListsUpdatePermissions;
 using ListsUpdatePermissions.SPHelpers;
+using ListsUpdateUserFieldsTimerJob.SPHelpers;
 using Microsoft.SharePoint;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         List<SPListItem> _allItemsToProcess;
         public void Execute(SPListToModifyContext context)
         {
-            if (context == null || !context.TJListConf.Enable)
+            if (context == null || !context.TJListConf.Enable || context.DisableUpdatePermissions)
                 return;
             _listContext = context;
             _listPermConf = SPJsonConf<ERConfPermissions>.Get(_listContext.CurrentList, CommonConstants.LIST_PROPERTY_PERM_JSON_CONF);
@@ -27,8 +28,17 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         }
         private void UpdatePermissions(SPListItem item)
         {
-            var listItemUpdatePermissions = new ListItemUpdatePermissions(item, _listPermConf);
-            listItemUpdatePermissions.UpdatePermissions();
+            try
+            {
+                var listItemUpdatePermissions = new ListItemUpdatePermissions(item, _listPermConf);
+                listItemUpdatePermissions.UpdatePermissions();
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format(CommonConstants.ERROR_MESSAGE_TEMPLATE, item.ParentList.ID, item.ID, ex.ToString());
+                SPLogger.WriteLog(SPLogger.Category.Unexpected, "UpdatePermissions Error", message);
+                return;
+            }
         }
     }
 }

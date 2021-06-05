@@ -15,7 +15,7 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         private readonly string _camlQueryTemplateForUserField = @"<Eq><FieldRef Name='{0}' LookupId='True' /><Value Type = 'User'>{1}</Value></Eq>";
         public void Execute(SPListToModifyContext context)
         {
-            if (context == null || !context.TJListConf.Enable || context.TJListConf.FilterCreatedLastDays > 0)
+            if (context == null || !context.TJListConf.Enable || context.TJListConf.ForceUpdate)
                 return;
             _listContext = context;
             _listContext.UsersItemsAndProfileChanges = GetUsersItemsAndProfileChanges();

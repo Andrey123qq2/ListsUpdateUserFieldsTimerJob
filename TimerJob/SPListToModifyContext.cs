@@ -15,7 +15,7 @@ namespace ListsUpdateUserFieldsTimerJob
         public SPList CurrentList { get; }
         public ListConfigUpdateUserFields TJListConf { get; }
         public List<UserItemsAndNewFieldsValues> UsersItemsAndProfileChanges;
-
+        public bool DisableUpdatePermissions = false;
         public UserProfileManagerWrapper ProfilesChangesManager;
         private ISPListModifierStrategy _modifierStrategy;
         

@@ -85,8 +85,8 @@
       <DependentUpon>TimerJobSettings.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="SPHelpers\Utility.cs" />
-    <Compile Include="TimerJob\Strategies\TimerJobReport.cs" />
     <Compile Include="TimerJob\Strategies\UpdateUserFieldsForce.cs" />
+    <Compile Include="TimerJob\Strategies\TimerJobReport.cs" />
     <Compile Include="TimerJob\Strategies\UserItemsAndNewFieldsValues.cs" />
     <Compile Include="TimerJob\SPListToModifyContext.cs" />
     <Compile Include="TimerJob\Strategies\UpdateUserFieldsByProfileChanges.cs" />

@@ -78,24 +78,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         protected global::System.Web.UI.WebControls.TextBox AdditionalCamlQuery;
 
         /// <summary>
-        /// TableRow4 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TableRow TableRow4;
-
-        /// <summary>
-        /// FilterCreatedLastDays control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox FilterCreatedLastDays;
-
-        /// <summary>
         /// TableRow5 control.
         /// </summary>
         /// <remarks>
@@ -105,6 +87,78 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         protected global::System.Web.UI.WebControls.TableRow TableRow5;
 
         /// <summary>
+        /// ForceUpdate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox ForceUpdate;
+
+        /// <summary>
+        /// DisableForceUpdatePermissionsTableRow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow DisableForceUpdatePermissionsTableRow;
+
+        /// <summary>
+        /// DisableForceUpdatePermissions control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox DisableForceUpdatePermissions;
+
+        /// <summary>
+        /// DisableForceUpdateAfterRunTableRow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow DisableForceUpdateAfterRunTableRow;
+
+        /// <summary>
+        /// DisableForceUpdateAfterRun control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox DisableForceUpdateAfterRun;
+
+        /// <summary>
+        /// ForceUpdateCamlQueryTableRow control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow ForceUpdateCamlQueryTableRow;
+
+        /// <summary>
+        /// ForceUpdateCamlQuery control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox ForceUpdateCamlQuery;
+
+        /// <summary>
+        /// TableRow7 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow TableRow7;
+
+        /// <summary>
         /// TimerJobSettings control.
         /// </summary>
         /// <remarks>
@@ -112,6 +166,24 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink TimerJobSettings;
+
+        /// <summary>
+        /// TableRow8 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow TableRow8;
+
+        /// <summary>
+        /// Notes control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox Notes;
 
         /// <summary>
         /// FieldsTable control.

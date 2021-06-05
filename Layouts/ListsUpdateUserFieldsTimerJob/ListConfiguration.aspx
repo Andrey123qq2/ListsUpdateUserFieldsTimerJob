@@ -11,9 +11,26 @@
 </asp:Content>
 
 <asp:Content ID="Main" ContentPlaceHolderID="PlaceHolderMain" runat="server">
+    <script type = "text/javascript">
+        function ShowHideForceUpdateCamlQuery() {
+            var forceUpdateCheckBox = document.querySelector("[id$=ForceUpdate]");
+            var forceUpdateCamlQueryTableRow = document.querySelector("[id$=ForceUpdateCamlQueryTableRow]");
+            var disableForceUpdateCheckBoxRow = document.querySelector("[id$=DisableForceUpdateAfterRunTableRow]");
+            var disableForceUpdatePermissionsCheckBoxRow = document.querySelector("[id$=DisableForceUpdatePermissionsTableRow]");
+            if (forceUpdateCheckBox.checked) {
+                forceUpdateCamlQueryTableRow.style.display = '';
+                disableForceUpdateCheckBoxRow.style.display = '';
+                disableForceUpdatePermissionsCheckBoxRow.style.display = '';
+            } else {
+                forceUpdateCamlQueryTableRow.style.display = 'none';
+                disableForceUpdateCheckBoxRow.style.display = 'none';
+                disableForceUpdatePermissionsCheckBoxRow.style.display = 'none';
+            }
+        }
+    </script>
     <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;margin-top:20px;" >
-        <asp:TableRow ID="TableRow1" runat="server" BackColor="White" >
-            <asp:TableCell>Enable</asp:TableCell>
+        <asp:TableRow ID="TableRow1" runat="server" BackColor="White">
+            <asp:TableCell Width="200">Enable</asp:TableCell>
             <asp:TableCell>
                 <asp:CheckBox ID="EnableCheckBox" runat="server"></asp:CheckBox>
             </asp:TableCell>
@@ -27,19 +44,43 @@
         <asp:TableRow ID="TableRow3" runat="server" BackColor="White" >
             <asp:TableCell>Additional CamlQuery</asp:TableCell>
             <asp:TableCell>
-                <asp:TextBox ID="AdditionalCamlQuery" runat="server" Width="300" TextMode="MultiLine" Height="150"></asp:TextBox>
-            </asp:TableCell>
-        </asp:TableRow>
-        <asp:TableRow ID="TableRow4" runat="server" BackColor="White" >
-            <asp:TableCell>Force update items created last days</asp:TableCell>
-            <asp:TableCell>
-                <asp:TextBox ID="FilterCreatedLastDays" runat="server" type="number"></asp:TextBox>
+                <asp:TextBox ID="AdditionalCamlQuery" runat="server" Width="380" TextMode="MultiLine" Height="140"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow ID="TableRow5" runat="server" BackColor="White" >
+            <asp:TableCell>Force update items</asp:TableCell>
+            <asp:TableCell>
+                <asp:CheckBox ID="ForceUpdate" runat="server"></asp:CheckBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="DisableForceUpdatePermissionsTableRow" runat="server" BackColor="White" >
+            <asp:TableCell>Disable force update permissions</asp:TableCell>
+            <asp:TableCell>
+                <asp:CheckBox ID="DisableForceUpdatePermissions" runat="server"></asp:CheckBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="DisableForceUpdateAfterRunTableRow" runat="server" BackColor="White" >
+            <asp:TableCell>Disable force update after run</asp:TableCell>
+            <asp:TableCell>
+                <asp:CheckBox ID="DisableForceUpdateAfterRun" runat="server"></asp:CheckBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="ForceUpdateCamlQueryTableRow" runat="server" BackColor="White" >
+            <asp:TableCell>Force update CamlQuery</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="ForceUpdateCamlQuery" runat="server" Width="380" TextMode="MultiLine" Height="140"></asp:TextBox>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow7" runat="server" BackColor="White" >
             <asp:TableCell>TimerJob Settings</asp:TableCell>
             <asp:TableCell>
                 <asp:HyperLink ID="TimerJobSettings" runat="server"></asp:HyperLink>
+            </asp:TableCell>
+        </asp:TableRow>
+        <asp:TableRow ID="TableRow8" runat="server" BackColor="White" >
+            <asp:TableCell>Notes</asp:TableCell>
+            <asp:TableCell>
+                <asp:TextBox ID="Notes" runat="server" Width="380" TextMode="MultiLine" Height="140"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
     </asp:Table>

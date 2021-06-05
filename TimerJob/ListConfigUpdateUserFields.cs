@@ -11,7 +11,11 @@ namespace ListsUpdateUserFieldsTimerJob
         public bool Enable;
         public string UserField;
         public Dictionary<string, string> AttributesFieldsMap;
-        public int FilterCreatedLastDays;
         public string AdditionalCamlQuery;
+        public bool ForceUpdate;
+        public bool DisableForceUpdateAfterRun;
+        public bool DisableForceUpdatePermissions;
+        public string ForceUpdateCamlQuery;
+        public string Notes;
     }
 }

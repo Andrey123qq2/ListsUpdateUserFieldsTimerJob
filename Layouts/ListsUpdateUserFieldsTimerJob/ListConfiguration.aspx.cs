@@ -55,16 +55,38 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             BindDataToUserField();
             BindDataToEnableCheckBox();
             BindDataToTimerJobUrl();
-            BindDataToFilterCreatedLastDays();
             BindDataToAdditionalCamlQuery();
+            BindDataToNotes();
+            BindDataToForceUpdate();
+            BindDataToForceUpdateCamlQuery();
+            AddHandlerToForceUpdate();
         }
-
+        private void AddHandlerToForceUpdate()
+        {
+            if (!ForceUpdate.Checked)
+            {
+                ForceUpdateCamlQueryTableRow.Style.Add("display", "none");
+                DisableForceUpdateAfterRunTableRow.Style.Add("display", "none");
+                DisableForceUpdatePermissionsTableRow.Style.Add("display", "none");
+            }
+            ForceUpdate.Attributes.Add("onclick", "ShowHideForceUpdateCamlQuery()");
+        }
         private void BindDataToAdditionalCamlQuery() {
             AdditionalCamlQuery.Text = _TJListConf.AdditionalCamlQuery;
         }
-        private void BindDataToFilterCreatedLastDays()
+        private void BindDataToForceUpdateCamlQuery()
         {
-            FilterCreatedLastDays.Text = _TJListConf.FilterCreatedLastDays.ToString();
+            ForceUpdateCamlQuery.Text = _TJListConf.ForceUpdateCamlQuery;
+        }
+        private void BindDataToNotes()
+        {
+            Notes.Text = _TJListConf.Notes;
+        }
+        private void BindDataToForceUpdate()
+        {
+            ForceUpdate.Checked = _TJListConf.ForceUpdate;
+            DisableForceUpdateAfterRun.Checked = _TJListConf.DisableForceUpdateAfterRun;
+            DisableForceUpdatePermissions.Checked = _TJListConf.DisableForceUpdatePermissions;
         }
         private string GetFieldDisplayName(string fieldInternalName)
         {
@@ -162,8 +184,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             string userFieldInternalName = _pageSPList.Fields.GetField(UserFieldDropDownList.SelectedValue).InternalName;
             _TJListConf.UserField = userFieldInternalName;
             _TJListConf.Enable = EnableCheckBox.Checked;
-            _TJListConf.FilterCreatedLastDays = int.Parse(FilterCreatedLastDays.Text);
             _TJListConf.AdditionalCamlQuery = AdditionalCamlQuery.Text;
+            _TJListConf.ForceUpdate = ForceUpdate.Checked;
+            _TJListConf.DisableForceUpdateAfterRun = DisableForceUpdateAfterRun.Checked;
+            _TJListConf.DisableForceUpdatePermissions = DisableForceUpdatePermissions.Checked;
+            _TJListConf.ForceUpdateCamlQuery = ForceUpdateCamlQuery.Text;
+            _TJListConf.Notes = Notes.Text;
         }
         private void GetFieldsParamsFromPageToERConf()
         {
