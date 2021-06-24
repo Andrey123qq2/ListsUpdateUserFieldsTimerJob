@@ -15,10 +15,13 @@ namespace ListsUpdateUserFieldsTimerJob.SPHelpers
             string rootSiteUrl = listField.ParentList.ParentWeb.Site.Url;
             XElement fieldSchemaXml = XElement.Parse(listField.SchemaXml);
             string lookupListId = fieldSchemaXml.Attribute("List").Value;
-            string lookupWebId = fieldSchemaXml.Attribute("WebId").Value;
+            string lookupWebId = fieldSchemaXml.Attribute("WebId")?.Value;
             string lookupFieldName = fieldSchemaXml.Attribute("ShowField").Value;
-
-            SPList lookupList = SPListHelpers.GetSPList(rootSiteUrl, new Guid(lookupWebId), new Guid(lookupListId));
+            SPList lookupList;
+            if (lookupWebId != null)
+                lookupList = SPListHelpers.GetSPList(rootSiteUrl, new Guid(lookupWebId), new Guid(lookupListId));
+            else
+                lookupList = SPListHelpers.GetSPList(rootSiteUrl, new Guid(lookupListId));
             SPListItemCollection lookupItem = lookupList.QueryItems(lookupFieldName, lookupTitleValue);
             if (lookupItem.Count == 0)
                 return new SPFieldLookupValue();
