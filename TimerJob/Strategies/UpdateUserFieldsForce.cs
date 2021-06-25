@@ -92,10 +92,9 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
             string listFieldTypeName = listField.TypeAsString;
             if (listFieldTypeName.Contains("User"))
             {
-                if (profileValue == null)
-                    fieldNewValue = new SPFieldUserValue();
-                else
-                    fieldNewValue = _listContext.CurrentList.ParentWeb.EnsureUser((string)profileValue);
+                fieldNewValue = (profileValue != null) ? 
+                    _listContext.CurrentList.ParentWeb.EnsureUser((string)profileValue) 
+                    : null;
             }
             else if (listFieldTypeName.Contains("Lookup"))
                 fieldNewValue = SPFieldHelpers.GetSPFieldLookupValueFromText(listField, (string)profileValue);
