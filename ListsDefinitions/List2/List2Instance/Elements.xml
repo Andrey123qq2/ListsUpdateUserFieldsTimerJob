@@ -21,6 +21,6 @@
 		Sequence="410"
 		Title="TimerJob Update User Fields">
 		<UrlAction
-			Url="_layouts/ListsUpdateUserFieldsTimerJob/ListConfiguration.aspx?List={ListId}" />
+			Url="_layouts/ListsUpdateUserFieldsTimerJob/ConfigEdit.aspx?List={ListId}" />
 		</CustomAction>
 </Elements>
