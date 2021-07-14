@@ -66,12 +66,20 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="Microsoft.SharePoint" />
     <Reference Include="Microsoft.SharePoint.Client.ServerRuntime" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\SiteAllConfigs.aspx.cs">
+      <DependentUpon>SiteAllConfigs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\SiteAllConfigs.aspx.designer.cs">
+      <DependentUpon>SiteAllConfigs.aspx.cs</DependentUpon>
+    </Compile>
     <Compile Include="SPHelpers\SPListItemExtensions.cs" />
     <Compile Include="SPHelpers\SPLogger.cs" />
     <Compile Include="SPHelpers\SPSiteExtensions.cs" />
@@ -101,12 +109,12 @@
     </Compile>
     <Compile Include="SPHelpers\SPFieldHelpers.cs" />
     <Compile Include="TimerJob\Strategies\ISPListModifierStrategy.cs" />
-    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.cs">
-      <DependentUpon>ListConfiguration.aspx</DependentUpon>
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ConfigEdit.aspx.cs">
+      <DependentUpon>ConfigEdit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx.designer.cs">
-      <DependentUpon>ListConfiguration.aspx.cs</DependentUpon>
+    <Compile Include="Layouts\ListsUpdateUserFieldsTimerJob\ConfigEdit.aspx.designer.cs">
+      <DependentUpon>ConfigEdit.aspx.cs</DependentUpon>
     </Compile>
     <Compile Include="SPHelpers\SPListHelpers.cs" />
     <Compile Include="SPHelpers\UserProfileManagerWrapper.cs" />
@@ -183,7 +191,8 @@
     <Content Include="Features\Feature2\Feature2.Template.xml">
       <DependentUpon>Feature2.feature</DependentUpon>
     </Content>
-    <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\ListConfiguration.aspx" />
+    <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\ConfigEdit.aspx" />
+    <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\SiteAllConfigs.aspx" />
     <Content Include="Layouts\ListsUpdateUserFieldsTimerJob\TimerJobSettings.aspx" />
     <Content Include="ListsDefinitions\List1\Elements.xml" />
     <Content Include="ListsDefinitions\List1\List1Instance\Elements.xml" />
