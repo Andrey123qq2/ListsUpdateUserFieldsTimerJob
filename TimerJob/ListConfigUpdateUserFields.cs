@@ -17,5 +17,6 @@ namespace ListsUpdateUserFieldsTimerJob
         public bool DisableForceUpdatePermissions;
         public string ForceUpdateCamlQuery;
         public string Notes;
+        public string ConfModified;
     }
 }
