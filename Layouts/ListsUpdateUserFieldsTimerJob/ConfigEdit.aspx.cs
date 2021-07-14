@@ -12,18 +12,20 @@ using ListsUpdateUserFieldsTimerJob.SPHelpers;
 
 namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 {
-    public partial class ListConfiguration : LayoutsPageBase
+    public partial class ConfigEdit : LayoutsPageBase
     {
         private SPList _pageSPList;
         private ListConfigUpdateUserFields _TJListConf;
         private SPFieldCollection _listFields;
         private List<string> _profilesAttributes;
         private readonly string _currentUrl = HttpContext.Current.Request.RawUrl;
+        private string _parentUrl;
         protected void Page_Load(object sender, EventArgs e)
         {
             InitParams();
             if (IsPostBack)
                 return;
+            BindDataToPageElements();
             BindDataToAdditionalTable();
             BindDataToFieldsTable();
         }
@@ -38,6 +40,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 _pageSPList.RootFolder.Properties,
                 CommonConstants.LIST_PROPERTY_JSON_CONF
             );
+            _parentUrl = Regex.Replace(_currentUrl, "ListsUpdateUserFieldsTimerJob/ConfigEdit", "listedit", RegexOptions.IgnoreCase);
         }
         private List<string> GetProfilesAttributes()
         {
@@ -50,6 +53,12 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         }
 
         #region BindData to Page
+        private void BindDataToPageElements()
+        {
+            SettingsLink.HRef = _parentUrl;
+            InfoLabel1.Text = "List name: \"" + _pageSPList.Title + "\"";
+        }
+
         private void BindDataToAdditionalTable()
         {
             BindDataToUserField();
@@ -226,13 +235,34 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         {
             RedirectToParentPage();
         }
-
+        protected void ButtonTestAdditionalCamlQuery_EventHandler(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(AdditionalCamlQuery.Text))
+                return;
+            TestAdditionalCamlQueryLabel.Text = String.Empty;
+            var itemsByCamlQuery = _pageSPList.QueryItems("<Where>" + AdditionalCamlQuery.Text + "</Where>");
+            TestAdditionalCamlQueryLabel.Text = String.Format(
+                "<br/>Filtered items count: {0}.<br/>Total list items count: {1}",
+                itemsByCamlQuery.Count.ToString(), _pageSPList.ItemCount.ToString()
+            );
+        }
+        protected void ButtonTestForceUpdateCamlQuery_EventHandler(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(ForceUpdateCamlQuery.Text))
+                return;
+            TestForceUpdateCamlQueryLabel.Text = String.Empty;
+            var itemsByCamlQuery = _pageSPList.QueryItems("<Where>" + ForceUpdateCamlQuery.Text + "</Where>");
+            TestForceUpdateCamlQueryLabel.Text = String.Format(
+                "<br/>Filtered items count: {0}.<br/>Total list items count: {1}",
+                itemsByCamlQuery.Count.ToString(), _pageSPList.ItemCount.ToString()
+            );
+        }
         //TODO: move to common lib
         private void RedirectToParentPage()
         {
             string listSettingsUrl = Regex.Replace(
-                HttpContext.Current.Request.RawUrl, 
-                "ListsUpdateUserFieldsTimerJob/ListConfiguration", "listedit", RegexOptions.IgnoreCase
+                HttpContext.Current.Request.RawUrl,
+                "ListsUpdateUserFieldsTimerJob/ConfigEdit", "listedit", RegexOptions.IgnoreCase
             );
             Response.Redirect(listSettingsUrl);
         }
