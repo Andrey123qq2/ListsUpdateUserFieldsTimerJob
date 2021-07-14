@@ -35,7 +35,7 @@
         }
     </script>
     <br/>
-    <asp:Label ID="InfoLabel1" runat="server"></asp:Label>
+    <asp:Label ID="InfoLabel1" runat="server" Font-Size="Medium"></asp:Label>
     <br/>
     <asp:Table ID="AdditionalParamsTable" runat="server" HorizontalAlign="Left" CssClass="ms-viewheadertr" style="margin-bottom:20px;margin-top:20px;" >
         <asp:TableRow ID="TableRow1" runat="server" BackColor="White">
@@ -43,6 +43,9 @@
                 <h3 class="ms-standardheader ms-inputformheader">
                     Enable
                 </h3>
+                <div class="ms-descriptiontext ms-inputformdescription">
+                    TimerJob updates fields by UserField's profile attributes last changes.
+                </div>
             </asp:TableCell>
             <asp:TableCell>
                 <asp:CheckBox ID="EnableCheckBox" runat="server"></asp:CheckBox>
@@ -137,7 +140,7 @@
                 </h3>
             </asp:TableCell>
             <asp:TableCell>
-                <asp:HyperLink ID="TimerJobSettings" runat="server"></asp:HyperLink>
+                <asp:HyperLink ID="TimerJobSettings" runat="server" Text="Common options"></asp:HyperLink>
             </asp:TableCell>
         </asp:TableRow>
         <asp:TableRow ID="TableRow8" runat="server" BackColor="White" >
@@ -150,6 +153,17 @@
                 <asp:TextBox ID="Notes" runat="server" Width="380" TextMode="MultiLine" Height="140"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
+        <asp:TableRow ID="TableRow32" runat="server" BackColor="White"  ForeColor="#000" >
+            <asp:TableCell>
+                <h3 class="ms-standardheader ms-inputformheader">
+                    Config last modified date
+                </h3>
+            </asp:TableCell>
+            <asp:TableCell>
+                <asp:Label ID="ConfModified" runat="server" Text=""></asp:Label>
+            </asp:TableCell>
+        </asp:TableRow>
+
     </asp:Table>
     <SharePoint:SPGridView ID="FieldsTable" runat="server" AutoGenerateColumns="false">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />

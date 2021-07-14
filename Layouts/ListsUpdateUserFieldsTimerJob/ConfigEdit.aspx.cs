@@ -61,13 +61,18 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
 
         private void BindDataToAdditionalTable()
         {
-            BindDataToUserField();
-            BindDataToEnableCheckBox();
-            BindDataToTimerJobUrl();
-            BindDataToAdditionalCamlQuery();
-            BindDataToNotes();
-            BindDataToForceUpdate();
-            BindDataToForceUpdateCamlQuery();
+            UserFieldDropDownList.DataSource = GetPersonFieldsForUserField();
+            UserFieldDropDownList.DataBind();
+            UserFieldDropDownList.SelectedValue = GetFieldDisplayName(_TJListConf.UserField);
+            EnableCheckBox.Checked = _TJListConf.Enable;
+            TimerJobSettings.NavigateUrl = "/_layouts/15/ListsUpdateUserFieldsTimerJob/TimerJobSettings.aspx?Source=" + _currentUrl;
+            AdditionalCamlQuery.Text = _TJListConf.AdditionalCamlQuery;
+            Notes.Text = _TJListConf.Notes;
+            ForceUpdate.Checked = _TJListConf.ForceUpdate;
+            DisableForceUpdateAfterRun.Checked = _TJListConf.DisableForceUpdateAfterRun;
+            DisableForceUpdatePermissions.Checked = _TJListConf.DisableForceUpdatePermissions;
+            ForceUpdateCamlQuery.Text = _TJListConf.ForceUpdateCamlQuery;
+            ConfModified.Text = _TJListConf.ConfModified;
             AddHandlerToForceUpdate();
         }
         private void AddHandlerToForceUpdate()
@@ -79,23 +84,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
                 DisableForceUpdatePermissionsTableRow.Style.Add("display", "none");
             }
             ForceUpdate.Attributes.Add("onclick", "ShowHideForceUpdateCamlQuery()");
-        }
-        private void BindDataToAdditionalCamlQuery() {
-            AdditionalCamlQuery.Text = _TJListConf.AdditionalCamlQuery;
-        }
-        private void BindDataToForceUpdateCamlQuery()
-        {
-            ForceUpdateCamlQuery.Text = _TJListConf.ForceUpdateCamlQuery;
-        }
-        private void BindDataToNotes()
-        {
-            Notes.Text = _TJListConf.Notes;
-        }
-        private void BindDataToForceUpdate()
-        {
-            ForceUpdate.Checked = _TJListConf.ForceUpdate;
-            DisableForceUpdateAfterRun.Checked = _TJListConf.DisableForceUpdateAfterRun;
-            DisableForceUpdatePermissions.Checked = _TJListConf.DisableForceUpdatePermissions;
         }
         private string GetFieldDisplayName(string fieldInternalName)
         {
@@ -112,13 +100,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             string fieldDisplayName = String.IsNullOrEmpty(fieldTitleByListConf) ? String.Empty : fieldTitleByListConf;
             return fieldDisplayName;
         }
-
-        private void BindDataToUserField()
-        {
-            UserFieldDropDownList.DataSource = GetPersonFieldsForUserField();
-            UserFieldDropDownList.DataBind();
-            UserFieldDropDownList.SelectedValue = GetFieldDisplayName(_TJListConf.UserField);
-        }
         private List<string> GetPersonFieldsForUserField()
         {
             List<string> personFields = _listFields
@@ -129,15 +110,6 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             personFields.Add(String.Empty);
             personFields.Sort();
             return personFields;
-        }
-        private void BindDataToEnableCheckBox()
-        {
-            EnableCheckBox.Checked = _TJListConf.Enable;
-        }
-        private void BindDataToTimerJobUrl()
-        {
-            TimerJobSettings.NavigateUrl = "/_layouts/15/ListsUpdateUserFieldsTimerJob/TimerJobSettings.aspx?Source=" + _currentUrl;
-            TimerJobSettings.Text = "Common options";
         }
         private void BindDataToFieldsTable()
         {
@@ -199,6 +171,7 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
             _TJListConf.DisableForceUpdatePermissions = DisableForceUpdatePermissions.Checked;
             _TJListConf.ForceUpdateCamlQuery = ForceUpdateCamlQuery.Text;
             _TJListConf.Notes = Notes.Text;
+            _TJListConf.ConfModified = DateTime.Now.ToString();
         }
         private void GetFieldsParamsFromPageToERConf()
         {
