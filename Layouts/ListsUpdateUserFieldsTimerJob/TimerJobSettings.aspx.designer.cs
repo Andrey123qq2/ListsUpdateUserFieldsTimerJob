@@ -78,6 +78,24 @@ namespace ListsUpdateUserFieldsTimerJob.Layouts.ListsUpdateUserFieldsTimerJob
         protected global::System.Web.UI.WebControls.TextBox SPReportFilePathTemplate;
 
         /// <summary>
+        /// TableRow4 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TableRow TableRow4;
+
+        /// <summary>
+        /// AllConfigs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink AllConfigs;
+
+        /// <summary>
         /// AttributesTable control.
         /// </summary>
         /// <remarks>

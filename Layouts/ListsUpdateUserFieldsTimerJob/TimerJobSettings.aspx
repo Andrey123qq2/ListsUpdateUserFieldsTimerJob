@@ -31,6 +31,12 @@
                 <asp:TextBox ID="SPReportFilePathTemplate" runat="server" Width="300px"></asp:TextBox>
             </asp:TableCell>
         </asp:TableRow>
+        <asp:TableRow ID="TableRow4" runat="server" BackColor="White" >
+            <asp:TableCell>Site all lists configs</asp:TableCell>
+            <asp:TableCell>
+                <asp:HyperLink ID="AllConfigs" runat="server" Text="AllConfigs" NavigateUrl="SiteAllConfigs.aspx"></asp:HyperLink>
+            </asp:TableCell>
+        </asp:TableRow>
     </asp:Table>
     <SharePoint:SPGridView ID="AttributesTable" runat="server" AutoGenerateColumns="false" style="margin-top:20px;">
         <RowStyle BackColor="#f6f7f8" Height="30px" HorizontalAlign="Left" />
