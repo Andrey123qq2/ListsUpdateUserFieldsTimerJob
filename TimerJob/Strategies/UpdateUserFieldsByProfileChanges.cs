@@ -52,13 +52,25 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         private List<SPListItem> GetUserItems(string userLogin)
         {
             string camlQueryString = GetCamlQueryFilterString(userLogin);
+            if (String.IsNullOrEmpty(camlQueryString))
+                return new List<SPListItem>();
             SPListItemCollection items = _listContext.CurrentList.QueryItems(camlQueryString);
             return items.Cast<SPListItem>().ToList();
         }
         private string GetCamlQueryFilterString(string userLogin)
         {
             string camlQueryFilterString;
-            SPUser spUser = _listContext.CurrentList.ParentWeb.EnsureUser(userLogin);
+            SPUser spUser;
+            try
+            {
+                spUser = _listContext.CurrentList.ParentWeb.EnsureUser(userLogin);
+            }
+            catch (Exception ex)
+            {
+                var message = String.Format(CommonConstants.ERROR_MESSAGE_TEMPLATE, _listContext.CurrentList.ID, userLogin, ex.ToString());
+                SPLogger.WriteLog(SPLogger.Category.Unexpected, "GetCamlQueryFilterString by userLogin Error", message);
+                return String.Empty;
+            }
             string camlQueryForUserField = String.Format(_camlQueryTemplateForUserField, _listContext.TJListConf.UserField, spUser.ID.ToString());
             if (!String.IsNullOrEmpty(_listContext.TJListConf.AdditionalCamlQuery))
                 camlQueryFilterString = "<Where><And>" + camlQueryForUserField + _listContext.TJListConf.AdditionalCamlQuery + "</And></Where>";

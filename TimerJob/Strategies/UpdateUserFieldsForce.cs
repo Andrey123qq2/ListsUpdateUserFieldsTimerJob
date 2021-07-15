@@ -51,7 +51,7 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
                 {
                     string userFieldValueString = i[_listContext.TJListConf.UserField].ToString();
                     SPFieldUserValue userFieldValue = new SPFieldUserValue(_listContext.CurrentList.ParentWeb, userFieldValueString);
-                    return userFieldValue.User.LoginName;
+                    return userFieldValue.User?.LoginName;
                 }
                 )
                 .ToList();
@@ -60,6 +60,7 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         private List<UserItemsAndNewFieldsValues> GetUsersItemsAndProfileAttributes(List<IGrouping<string, SPListItem>> listItemsGroupedByUsers)
         {
             var usersItemsAndProfileAttributes = listItemsGroupedByUsers
+                .Where(g => !String.IsNullOrEmpty(g.Key))
                 .Select(g =>
                 {
                     string userLogin = g.Key;
@@ -76,7 +77,15 @@ namespace ListsUpdateUserFieldsTimerJob.Strategies
         }
         private Dictionary<string, object> GetFieldsNewValuesMapFromUserProfile(string userLogin)
         {
-            var userProfile = _listContext.ProfilesChangesManager.GetUserProfile(userLogin);
+            UserProfile userProfile;
+            try
+            {
+                userProfile = _listContext.ProfilesChangesManager.GetUserProfile(userLogin);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return new Dictionary<string, object>();
+            }
             Dictionary<string, object> fieldsNewValuesMap = _listContext.TJListConf.AttributesFieldsMap
                 .ToDictionary(
                     a => a.Value,
