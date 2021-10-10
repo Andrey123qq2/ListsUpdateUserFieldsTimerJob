@@ -19,15 +19,27 @@ Aditionally can be used caml query for items filtration (see below).
 Example 1. Items with "Status" field that is not Completed/Rejected
 ```
 <And>
-<Neq><FieldRef Name = 'Status' /> <Value Type = 'Choice'>Completed</Value></Neq>
-<Neq><FieldRef Name = 'Status' /> <Value Type = 'Choice'>Rejected</Value></Neq>
+	<Neq>
+		<FieldRef Name = 'Status'/>
+		<Value Type = 'Choice'>Completed</Value>
+	</Neq>
+	<Neq>
+		<FieldRef Name = 'Status'/>
+		<Value Type = 'Choice'>Rejected</Value>
+	</Neq>
 </And>
 ```
 Example 2. Items created after a certain date.
 ```
-<Geq><FieldRef Name = Created/><Value IncludeTimeValue = 'FALSE' Type = 'DateTime'>2021-05-01T00: 00: 00Z </Value></Geq>
+<Geq>
+	<FieldRef Name = Created/>
+	<Value IncludeTimeValue = 'FALSE' Type = 'DateTime'>2021-05-01T00: 00: 00Z</Value>
+</Geq>
 ```
 Example 3. Items created in the last day.
 ```
-<Geq><FieldRef Name = Created /> <Value Type = 'DateTime'> <Today OffsetDays = -1 /></Value></Geq>
+<Geq>
+	<FieldRef Name = Created />
+	<Value Type = 'DateTime'> <Today OffsetDays = -1 /></Value>
+</Geq>
 ```
